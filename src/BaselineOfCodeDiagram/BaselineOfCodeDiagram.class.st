@@ -9,11 +9,22 @@ BaselineOfCodeDiagram >> baseline: spec [
 	<baseline>
 		
 	spec for: #'common' do: [			
-		spec package: 'Flow-Core' with: [ spec requires: #( 'Roassal3' ) ].
+		spec package: 'Flow-Core' with: [ spec requires: #( 'Roassal3' 'Cassowary' ) ].
 
 		spec
 			group: 'default' with: #('Flow-Core').
-		self roassal3: spec. ]
+		self 
+			cassowary: spec;
+			roassal3: spec. ]
+]
+
+{ #category : #baselines }
+BaselineOfCodeDiagram >> cassowary: spec [
+	spec
+		baseline: 'Cassowary' with: [ 
+			spec
+				"loads: 'Core';"
+				repository: 'github://noha/Cassowary/source' ]
 ]
 
 { #category : #baselines }
