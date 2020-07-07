@@ -31,7 +31,6 @@ FlowDiagram >> drawOn: canvas [
 	FCConstraintLayout new 
 		edges: visitor edges;
 		positions: visitor positions;
-		solver: visitor solver;
 		applyOn: canvas nodes. 
 	canvas edges do: [ :each | | c | (each model key isKindOf: Condition) ifTrue: [
 		c := each model key.

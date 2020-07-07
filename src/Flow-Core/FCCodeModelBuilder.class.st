@@ -2,17 +2,10 @@ Class {
 	#name : #FCCodeModelBuilder,
 	#superclass : #Object,
 	#instVars : [
-		'startState',
-		'states'
+		'startState'
 	],
 	#category : #'Flow-Core'
 }
-
-{ #category : #initialization }
-FCCodeModelBuilder >> initialize [
-	super initialize.
-	states := Dictionary new
-]
 
 { #category : #'as yet unclassified' }
 FCCodeModelBuilder >> model [
@@ -37,7 +30,7 @@ FCCodeModelBuilder >> resolve: aString outgoing: aCollection [
 	| method pragma state |
 	method := self resolveMethod: aCollection.
 	pragma := method pragmaAt: #flow:element:outgoing:.
-	state := pragma arguments second asClass new.
+	state := (StateObject withName: pragma arguments second) new.
 	state label: pragma arguments first.
 	^ state 
 		resolve: pragma arguments first

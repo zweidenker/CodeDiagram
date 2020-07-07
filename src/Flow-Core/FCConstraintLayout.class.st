@@ -3,8 +3,7 @@ Class {
 	#superclass : #RSLayout,
 	#instVars : [
 		'edges',
-		'positions',
-		'solver'
+		'positions'
 	],
 	#category : #'Flow-Core'
 }
@@ -27,9 +26,4 @@ FCConstraintLayout >> edges: aCollection [
 { #category : #accessing }
 FCConstraintLayout >> positions: aCollection [ 
 	positions := aCollection 
-]
-
-{ #category : #accessing }
-FCConstraintLayout >> solver: aClSimplexSolver [ 
-	solver := aClSimplexSolver
 ]
