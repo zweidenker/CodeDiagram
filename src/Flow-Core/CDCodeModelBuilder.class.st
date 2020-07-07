@@ -12,14 +12,6 @@ CDCodeModelBuilder >> model [
 	^ startState
 ]
 
-{ #category : #setting }
-CDCodeModelBuilder >> processFlow: flowName stateClass: aState for: anObject [
-	aState
-		label: flowName.
-	aState resolve: flowName in: anObject builder: self.
-	^ aState
-]
-
 { #category : #'as yet unclassified' }
 CDCodeModelBuilder >> resolve: flowName no: aCollection [
 	^ self resolve: flowName outgoing: aCollection 
@@ -56,17 +48,5 @@ CDCodeModelBuilder >> startAt: aClass method: aString [
 
 	
 	startState := CDStartState labelled: 'Start'.
-	 self 
-		processFlow: #start 
-		stateClass: startState
-		for: { aClass name . aString }
-]
-
-{ #category : #setting }
-CDCodeModelBuilder >> startStateClass: aCompiledMethod [
-
-	startState := self 
-		processFlow: #start 
-		stateClass: CDStartState new 
-		for: aCompiledMethod 
+	startState resolve: #start in: { aClass name . aString } builder: self.
 ]

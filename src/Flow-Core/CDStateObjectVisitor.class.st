@@ -2,17 +2,26 @@ Class {
 	#name : #CDStateObjectVisitor,
 	#superclass : #Object,
 	#instVars : [
-		'positions',
 		'solver',
 		'seen',
-		'edges'
+		'edges',
+		'dimensions'
 	],
 	#category : #'Flow-Core'
 }
 
-{ #category : #visiting }
-CDStateObjectVisitor >> columnSize [
-	^ self shapeSize * 2
+{ #category : #accessing }
+CDStateObjectVisitor >> dimensionAt: aState [ 
+	aState ifNil: [ Error signal: 'nil does not work' ].
+	^ self dimensions 
+		at: aState
+		ifAbsentPut: [ 
+			CDShapeDimension labelled: aState label ]
+]
+
+{ #category : #accessing }
+CDStateObjectVisitor >> dimensions [ 
+	^ dimensions 
 ]
 
 { #category : #accessing }
@@ -20,10 +29,15 @@ CDStateObjectVisitor >> edges [
 	^ edges
 ]
 
+{ #category : #visiting }
+CDStateObjectVisitor >> horizontalGap [
+	^ self shapeSize * 2
+]
+
 { #category : #initialization }
 CDStateObjectVisitor >> initialize [ 	
 	super initialize.
-	positions := Dictionary new.
+	dimensions := Dictionary new.
 	solver := ClSimplexSolver new.
 	seen := OrderedDictionary new.
 	edges := OrderedCollection new
@@ -31,53 +45,43 @@ CDStateObjectVisitor >> initialize [
 
 { #category : #visiting }
 CDStateObjectVisitor >> layout: aState [ 
-	self visit: aState.
-	"self postProcess"
+	self visit: aState
 ]
 
 { #category : #accessing }
 CDStateObjectVisitor >> objects [
-	^ positions keys
-]
-
-{ #category : #accessing }
-CDStateObjectVisitor >> positionAt: aState [ 
-	aState ifNil: [ Error signal: 'nil does not work' ].
-	^ self positions 
-		at: aState
-		ifAbsentPut: [ 
-			(ClVariable newWith: 0 name: aState asString, ':X')
-				@ (ClVariable newWith: 0 name: aState asString, ':Y') ]
-]
-
-{ #category : #accessing }
-CDStateObjectVisitor >> positions [
-	^ positions
-]
-
-{ #category : #'as yet unclassified' }
-CDStateObjectVisitor >> postProcess [
-	| assocs |
-	assocs := positions associations.
-	assocs do: [ :outer |
-		"solver
-			addConstraint: (outer value x cnGEQ: 0 strength: ClStrength required);
-			addConstraint: (outer value y cnLEQ: 2000 strength: ClStrength required)."
-		assocs do: [ :inner |
-			( (assocs indexOf: outer) < (assocs indexOf: inner) )  ifTrue: [ 
-				solver 
-					addConstraint: (outer value x cnLEQ: inner value x - self columnSize strength: ClStrength strong weight: 2.0);
-					addConstraint: (outer value x cnGEQ: inner value x + self columnSize strength: ClStrength strong weight: 1.0);
-					addConstraint: (outer value y cnGEQ: inner value y + self rowSize strength: ClStrength strong weight: 2.0)";
-					addConstraint: (outer value y cnLEQ: inner value y - self rowSize strength: ClStrength strong weight: 1.0)".
- ] ]
-		 ]
-
+	^ dimensions keys
 ]
 
 { #category : #visiting }
-CDStateObjectVisitor >> rowSize [
-	^ self shapeSize * 1.5
+CDStateObjectVisitor >> position: next centerOf: prev strength: aNumber [
+	solver 
+		addConstraint: (prev x cnEqual: next x strength: aNumber).
+]
+
+{ #category : #visiting }
+CDStateObjectVisitor >> position: next leftOf: prev strength: aNumber [
+"	solver 
+		addConstraint: (prev x cnGEQ: next x + next width + self horizontalGap strength: aNumber)"
+	self position: prev rightOf: next strength: aNumber 
+]
+
+{ #category : #visiting }
+CDStateObjectVisitor >> position: next middleOf: prev strength: aNumber [
+	solver 
+		addConstraint: (prev y cnEqual: next y strength: aNumber).
+]
+
+{ #category : #visiting }
+CDStateObjectVisitor >> position: next rightOf: prev strength: aNumber [
+	solver 
+		addConstraint: (next x cnGEQ: prev x + self horizontalGap strength: aNumber)
+]
+
+{ #category : #visiting }
+CDStateObjectVisitor >> position: next under: prev strength: aNumber [
+	solver 
+		addConstraint: (next y cnGEQ: prev y + "prev height + "self verticalGap strength: aNumber)
 ]
 
 { #category : #accessing }
@@ -91,6 +95,11 @@ CDStateObjectVisitor >> solver [
 ]
 
 { #category : #visiting }
+CDStateObjectVisitor >> verticalGap [
+	^ self shapeSize * 1.5
+]
+
+{ #category : #visiting }
 CDStateObjectVisitor >> visit: aState [ 
 	^ seen 
 		at: aState
@@ -101,34 +110,37 @@ CDStateObjectVisitor >> visit: aState [
 
 { #category : #visiting }
 CDStateObjectVisitor >> visitAction: anAction [ 
-	| position incomingPosition outgoingPosition |
-	position := self positionAt: anAction.
-	incomingPosition := self positionAt: anAction incoming.
+	| action previous outgoingPosition |
+	action := self dimensionAt: anAction.
+	previous := self dimensionAt: anAction incoming.
 
-	solver 
-		addConstraint: (position x cnGEQ: incomingPosition x + self columnSize strength: ClStrength medium);
-		addConstraint: (position y cnGEQ: incomingPosition y strength: ClStrength medium).
+	"self position: action rightOf: previous strength: ClStrength medium."
+	self position: action middleOf: previous strength: ClStrength medium.
+	"self position: action under: previous strength: ClStrength weak."
+	"solver 
+		addConstraint: (state x cnGEQ: prevState x + self horizontalGap strength: ClStrength medium);
+		addConstraint: (state y cnGEQ: prevState y strength: ClStrength medium)."
 	anAction outgoing ifNotNil: [ 
 		edges add: (anAction -> (anAction outgoing)).
-		outgoingPosition := self positionAt: anAction outgoing.
-		solver 
-			addConstraint: (position x + self columnSize cnLEQ: outgoingPosition x strength: ClStrength medium).
+		outgoingPosition := self dimensionAt: anAction outgoing.
+		self position: outgoingPosition rightOf: action strength: ClStrength weak.
 		self visit: anAction outgoing ]
 ]
 
 { #category : #visiting }
 CDStateObjectVisitor >> visitCondition: aCondition [ 
-	| position yesPosition noPosition incomingPosition |
-	position := self positionAt: aCondition.
-	yesPosition := self positionAt: aCondition yes.
-	noPosition := self positionAt: aCondition no.
-	incomingPosition := self positionAt: aCondition incoming. 
-	solver 
-		addConstraint: (position y cnEqual: yesPosition y strength: ClStrength required);
-		addConstraint: (position x cnEqual: noPosition x strength: ClStrength required);
-		addConstraint: (yesPosition x cnGEQ: position x + self columnSize strength: ClStrength required);
-		addConstraint: (noPosition y cnGEQ: position y + self rowSize strength: ClStrength strong);
-		addConstraint: (position y cnGEQ: incomingPosition y + self rowSize strength: ClStrength medium).
+	| condition yes no previous |
+	condition := self dimensionAt: aCondition.
+	yes := self dimensionAt: aCondition yes.
+	no := self dimensionAt: aCondition no.
+	previous := self dimensionAt: aCondition incoming. 
+	self 
+		position: yes rightOf: condition strength: ClStrength strong;
+		position: yes middleOf: condition strength: ClStrength strong; 
+		position: no under: condition strength: ClStrength strong;
+		position: no centerOf: condition strength: ClStrength strong;
+		position: condition under: previous strength: ClStrength strong. 
+
 	edges add: (aCondition -> (aCondition yes)).
 	edges add: (aCondition -> (aCondition no)).
 
@@ -138,23 +150,25 @@ CDStateObjectVisitor >> visitCondition: aCondition [
 
 { #category : #visiting }
 CDStateObjectVisitor >> visitEnd: anEndState [ 
-	| position incomingPosition |
-	position := self positionAt: anEndState.
-	incomingPosition := self positionAt: anEndState incoming.
-	self solver
+	| end previous |
+	end := self dimensionAt: anEndState.
+	previous := self dimensionAt: anEndState incoming.
+	self 
+		position: end under: previous strength: ClStrength strong;
+		position: end centerOf: previous strength:  ClStrength required.
+	"self solver
 		addConstraint: (position x cnEqual: incomingPosition x + (anEndState incoming shape width / 2) strength: ClStrength strong);
-		addConstraint: (position y cnGEQ: incomingPosition y + self rowSize strength: ClStrength strong).
-
+		addConstraint: (position y cnGEQ: incomingPosition y + self verticalGap strength: ClStrength strong).
+"
 ]
 
 { #category : #visiting }
 CDStateObjectVisitor >> visitStartState: aStartState [ 
-	| startPosition nextPosition |
-	startPosition := self positionAt: aStartState.
-	nextPosition := self positionAt: aStartState outgoing.
-	self solver
-		addConstraint: (startPosition x cnEqual: nextPosition x strength: ClStrength required);
-		addConstraint: (nextPosition y  cnGEQ: startPosition y + self rowSize strength: ClStrength required).
+	| start next |
+	start := self dimensionAt: aStartState.
+	next := self dimensionAt: aStartState outgoing.
+	self 
+		position: next centerOf: start strength: ClStrength required.
 	edges add: (aStartState -> (aStartState outgoing)).
 
 	^ self visit: aStartState outgoing
@@ -162,14 +176,15 @@ CDStateObjectVisitor >> visitStartState: aStartState [
 
 { #category : #visiting }
 CDStateObjectVisitor >> visitState: aState [ 
-	| position incomingPosition |
-	position := self positionAt: aState.
-	incomingPosition := self positionAt: aState incoming.
-	solver 
-		"addConstraint: (position x cnEqual: incomingPosition x strength: ClStrength strong);"
-		addConstraint: (position y cnGEQ: incomingPosition y + self rowSize strength: ClStrength medium).
+	| state previous next |
+	state := self dimensionAt: aState.
+	previous := self dimensionAt: aState incoming.
+
+	self position: state under: previous strength: ClStrength medium. 
 		
 	aState outgoing ifNotNil: [ 
 		edges add: (aState -> (aState outgoing)).
+		next := self dimensionAt: aState outgoing.
+		"self position: next under: state strength: ClStrength medium."
 		self visit: aState outgoing ]
 ]

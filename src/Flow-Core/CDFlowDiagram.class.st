@@ -20,7 +20,6 @@ CDFlowDiagram >> drawOn: canvas [
 	visitor := CDStateObjectVisitor new.
 	visitor layout: model.
 	visitor.
-
 	visitor objects do: [ :object |
 		canvas add: object shape ].
 
@@ -30,7 +29,8 @@ CDFlowDiagram >> drawOn: canvas [
 	eb useAssociations: visitor edges.
 	CDConstraintLayout new 
 		edges: visitor edges;
-		positions: visitor positions;
+		solver: visitor solver;
+		dimensions: visitor dimensions;
 		applyOn: canvas nodes. 
 	canvas edges do: [ :each | | c | (each model key isKindOf: CDCondition) ifTrue: [
 		c := each model key.
@@ -47,7 +47,7 @@ CDFlowDiagram >> drawOn: canvas [
         		middle.
     		each addInteraction: lbl]]].
 	canvas zoomToFit.
-	^ canvas @RSCanvasController 
+	^ canvas @RSCanvasController
 ]
 
 { #category : #visualization }
