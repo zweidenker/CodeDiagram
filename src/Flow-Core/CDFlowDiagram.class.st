@@ -1,5 +1,5 @@
 Class {
-	#name : #FlowDiagram,
+	#name : #CDFlowDiagram,
 	#superclass : #Object,
 	#instVars : [
 		'model'
@@ -8,16 +8,16 @@ Class {
 }
 
 { #category : #accessing }
-FlowDiagram class >> startAt: aClass method: aString [
+CDFlowDiagram class >> startAt: aClass method: aString [
 	^ self new
 		startAt: aClass method: aString
 ]
 
 { #category : #drawing }
-FlowDiagram >> drawOn: canvas [
+CDFlowDiagram >> drawOn: canvas [
 
 	| visitor  eb |
-	visitor := StateObjectVisitor new.
+	visitor := CDStateObjectVisitor new.
 	visitor layout: model.
 	visitor.
 
@@ -28,11 +28,11 @@ FlowDiagram >> drawOn: canvas [
 	eb canvas: canvas.
 	eb shapes: canvas nodes.
 	eb useAssociations: visitor edges.
-	FCConstraintLayout new 
+	CDConstraintLayout new 
 		edges: visitor edges;
 		positions: visitor positions;
 		applyOn: canvas nodes. 
-	canvas edges do: [ :each | | c | (each model key isKindOf: Condition) ifTrue: [
+	canvas edges do: [ :each | | c | (each model key isKindOf: CDCondition) ifTrue: [
 		c := each model key.
 		(c yes = each model value) ifTrue: [ |lbl|
 			lbl := RSLabeled new model: 'YES'.
@@ -51,7 +51,7 @@ FlowDiagram >> drawOn: canvas [
 ]
 
 { #category : #visualization }
-FlowDiagram >> gtInspectorViewIn: composite [
+CDFlowDiagram >> gtInspectorViewIn: composite [
 	<gtInspectorPresentationOrder: 0>
 	
 	composite roassal3
@@ -65,8 +65,8 @@ FlowDiagram >> gtInspectorViewIn: composite [
 ]
 
 { #category : #accessing }
-FlowDiagram >> startAt: aClass method: aString [
-	model := FCCodeModelBuilder new
+CDFlowDiagram >> startAt: aClass method: aString [
+	model := CDCodeModelBuilder new
 		startAt: aClass method: aString asSymbol;
 		model
 ]

@@ -1,5 +1,5 @@
 Class {
-	#name : #StateObject,
+	#name : #CDStateObject,
 	#superclass : #Object,
 	#instVars : [
 		'label',
@@ -9,57 +9,57 @@ Class {
 }
 
 { #category : #'instance creation' }
-StateObject class >> labelled: aString [ 
+CDStateObject class >> labelled: aString [ 
 	^ self new 
 		label: aString
 ]
 
 { #category : #'instance creation' }
-StateObject class >> withName: aString [
+CDStateObject class >> withName: aString [
 	^ self allSubclasses 
 		detect: [ :each | each stateObjectName = aString ]
 		ifNone: [  nil ]
 ]
 
 { #category : #accessing }
-StateObject >> basicSize [ 
+CDStateObject >> basicSize [ 
 	^ 150
 ]
 
 { #category : #'public - shape' }
-StateObject >> border [
+CDStateObject >> border [
 	^ RSBorder new 
 		width: 5; 
 		color: Color darkGray
 ]
 
 { #category : #accessing }
-StateObject >> fontSize [
+CDStateObject >> fontSize [
 	^ 15
 ]
 
 { #category : #accessing }
-StateObject >> label [
+CDStateObject >> label [
 	^ label
 ]
 
 { #category : #accessing }
-StateObject >> label: anObject [
+CDStateObject >> label: anObject [
 	label := anObject
 ]
 
 { #category : #printing }
-StateObject >> printOn: aStream [
+CDStateObject >> printOn: aStream [
 	aStream << self class name << ' - ' << label asString
 ]
 
 { #category : #'as yet unclassified' }
-StateObject >> resolve: flowName in: aCollection builder: aBuilder [ 
+CDStateObject >> resolve: flowName in: aCollection builder: aBuilder [ 
 	outgoing := aBuilder resolve: flowName outgoing: aCollection.
 	outgoing incoming: self.
 ]
 
 { #category : #accessing }
-StateObject >> shapeSize [
+CDStateObject >> shapeSize [
 	^ self basicSize 
 ]

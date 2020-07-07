@@ -1,5 +1,5 @@
 Class {
-	#name : #FCCodeModelBuilder,
+	#name : #CDCodeModelBuilder,
 	#superclass : #Object,
 	#instVars : [
 		'startState'
@@ -8,12 +8,12 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
-FCCodeModelBuilder >> model [
+CDCodeModelBuilder >> model [
 	^ startState
 ]
 
 { #category : #setting }
-FCCodeModelBuilder >> processFlow: flowName stateClass: aState for: anObject [
+CDCodeModelBuilder >> processFlow: flowName stateClass: aState for: anObject [
 	aState
 		label: flowName.
 	aState resolve: flowName in: anObject builder: self.
@@ -21,16 +21,16 @@ FCCodeModelBuilder >> processFlow: flowName stateClass: aState for: anObject [
 ]
 
 { #category : #'as yet unclassified' }
-FCCodeModelBuilder >> resolve: flowName no: aCollection [
+CDCodeModelBuilder >> resolve: flowName no: aCollection [
 	^ self resolve: flowName outgoing: aCollection 
 ]
 
 { #category : #'as yet unclassified' }
-FCCodeModelBuilder >> resolve: aString outgoing: aCollection [ 
+CDCodeModelBuilder >> resolve: aString outgoing: aCollection [ 
 	| method pragma state |
 	method := self resolveMethod: aCollection.
 	pragma := method pragmaAt: #flow:element:outgoing:.
-	state := (StateObject withName: pragma arguments second) new.
+	state := (CDStateObject withName: pragma arguments second) new.
 	state label: pragma arguments first.
 	^ state 
 		resolve: pragma arguments first
@@ -39,12 +39,12 @@ FCCodeModelBuilder >> resolve: aString outgoing: aCollection [
 ]
 
 { #category : #'as yet unclassified' }
-FCCodeModelBuilder >> resolve: flowName yes: aCollection [
+CDCodeModelBuilder >> resolve: flowName yes: aCollection [
 	^ self resolve: flowName outgoing: aCollection 
 ]
 
 { #category : #'as yet unclassified' }
-FCCodeModelBuilder >> resolveMethod: aCollection [ 
+CDCodeModelBuilder >> resolveMethod: aCollection [ 
 	| targetClass |
 	self assert: aCollection size = 2.
 	targetClass := self class environment at: aCollection first.
@@ -52,10 +52,10 @@ FCCodeModelBuilder >> resolveMethod: aCollection [
 ]
 
 { #category : #setting }
-FCCodeModelBuilder >> startAt: aClass method: aString [
+CDCodeModelBuilder >> startAt: aClass method: aString [
 
 	
-	startState := StartState labelled: 'Start'.
+	startState := CDStartState labelled: 'Start'.
 	 self 
 		processFlow: #start 
 		stateClass: startState
@@ -63,10 +63,10 @@ FCCodeModelBuilder >> startAt: aClass method: aString [
 ]
 
 { #category : #setting }
-FCCodeModelBuilder >> startStateClass: aCompiledMethod [
+CDCodeModelBuilder >> startStateClass: aCompiledMethod [
 
 	startState := self 
 		processFlow: #start 
-		stateClass: StartState new 
+		stateClass: CDStartState new 
 		for: aCompiledMethod 
 ]

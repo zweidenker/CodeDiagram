@@ -1,6 +1,6 @@
 Class {
-	#name : #EndState,
-	#superclass : #StateObject,
+	#name : #CDEndState,
+	#superclass : #CDStateObject,
 	#instVars : [
 		'incoming'
 	],
@@ -8,32 +8,32 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
-EndState class >> stateObjectName [
+CDEndState class >> stateObjectName [
 	^ #end
 ]
 
 { #category : #visiting }
-EndState >> acceptStateVisitor: aStateObjectVisitor [ 
+CDEndState >> acceptStateVisitor: aStateObjectVisitor [ 
 	^ aStateObjectVisitor visitEnd: self
 ]
 
 { #category : #accessing }
-EndState >> incoming [
+CDEndState >> incoming [
 	^ incoming
 ]
 
 { #category : #accessing }
-EndState >> incoming: aState [ 
+CDEndState >> incoming: aState [ 
 	incoming := aState
 ]
 
 { #category : #'as yet unclassified' }
-EndState >> resolve: aString in: aClass builder: aFCCodeModelBuilder [ 
+CDEndState >> resolve: aString in: aClass builder: aFCCodeModelBuilder [ 
 	
 ]
 
 { #category : #'as yet unclassified' }
-EndState >> shape [
+CDEndState >> shape [
 	^ RSEllipse new 
 		model: self;
 		size: 50;

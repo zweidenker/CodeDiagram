@@ -1,5 +1,5 @@
 Class {
-	#name : #StateObjectVisitor,
+	#name : #CDStateObjectVisitor,
 	#superclass : #Object,
 	#instVars : [
 		'positions',
@@ -11,17 +11,17 @@ Class {
 }
 
 { #category : #visiting }
-StateObjectVisitor >> columnSize [
+CDStateObjectVisitor >> columnSize [
 	^ self shapeSize * 2
 ]
 
 { #category : #accessing }
-StateObjectVisitor >> edges [
+CDStateObjectVisitor >> edges [
 	^ edges
 ]
 
 { #category : #initialization }
-StateObjectVisitor >> initialize [ 	
+CDStateObjectVisitor >> initialize [ 	
 	super initialize.
 	positions := Dictionary new.
 	solver := ClSimplexSolver new.
@@ -30,18 +30,18 @@ StateObjectVisitor >> initialize [
 ]
 
 { #category : #visiting }
-StateObjectVisitor >> layout: aState [ 
+CDStateObjectVisitor >> layout: aState [ 
 	self visit: aState.
 	"self postProcess"
 ]
 
 { #category : #accessing }
-StateObjectVisitor >> objects [
+CDStateObjectVisitor >> objects [
 	^ positions keys
 ]
 
 { #category : #accessing }
-StateObjectVisitor >> positionAt: aState [ 
+CDStateObjectVisitor >> positionAt: aState [ 
 	aState ifNil: [ Error signal: 'nil does not work' ].
 	^ self positions 
 		at: aState
@@ -51,12 +51,12 @@ StateObjectVisitor >> positionAt: aState [
 ]
 
 { #category : #accessing }
-StateObjectVisitor >> positions [
+CDStateObjectVisitor >> positions [
 	^ positions
 ]
 
 { #category : #'as yet unclassified' }
-StateObjectVisitor >> postProcess [
+CDStateObjectVisitor >> postProcess [
 	| assocs |
 	assocs := positions associations.
 	assocs do: [ :outer |
@@ -76,22 +76,22 @@ StateObjectVisitor >> postProcess [
 ]
 
 { #category : #visiting }
-StateObjectVisitor >> rowSize [
+CDStateObjectVisitor >> rowSize [
 	^ self shapeSize * 1.5
 ]
 
 { #category : #accessing }
-StateObjectVisitor >> shapeSize [
+CDStateObjectVisitor >> shapeSize [
 	^ 150
 ]
 
 { #category : #accessing }
-StateObjectVisitor >> solver [
+CDStateObjectVisitor >> solver [
 	^ solver
 ]
 
 { #category : #visiting }
-StateObjectVisitor >> visit: aState [ 
+CDStateObjectVisitor >> visit: aState [ 
 	^ seen 
 		at: aState
 		ifAbsent: [ 
@@ -100,7 +100,7 @@ StateObjectVisitor >> visit: aState [
 ]
 
 { #category : #visiting }
-StateObjectVisitor >> visitAction: anAction [ 
+CDStateObjectVisitor >> visitAction: anAction [ 
 	| position incomingPosition outgoingPosition |
 	position := self positionAt: anAction.
 	incomingPosition := self positionAt: anAction incoming.
@@ -117,7 +117,7 @@ StateObjectVisitor >> visitAction: anAction [
 ]
 
 { #category : #visiting }
-StateObjectVisitor >> visitCondition: aCondition [ 
+CDStateObjectVisitor >> visitCondition: aCondition [ 
 	| position yesPosition noPosition incomingPosition |
 	position := self positionAt: aCondition.
 	yesPosition := self positionAt: aCondition yes.
@@ -137,7 +137,7 @@ StateObjectVisitor >> visitCondition: aCondition [
 ]
 
 { #category : #visiting }
-StateObjectVisitor >> visitEnd: anEndState [ 
+CDStateObjectVisitor >> visitEnd: anEndState [ 
 	| position incomingPosition |
 	position := self positionAt: anEndState.
 	incomingPosition := self positionAt: anEndState incoming.
@@ -148,7 +148,7 @@ StateObjectVisitor >> visitEnd: anEndState [
 ]
 
 { #category : #visiting }
-StateObjectVisitor >> visitStartState: aStartState [ 
+CDStateObjectVisitor >> visitStartState: aStartState [ 
 	| startPosition nextPosition |
 	startPosition := self positionAt: aStartState.
 	nextPosition := self positionAt: aStartState outgoing.
@@ -161,7 +161,7 @@ StateObjectVisitor >> visitStartState: aStartState [
 ]
 
 { #category : #visiting }
-StateObjectVisitor >> visitState: aState [ 
+CDStateObjectVisitor >> visitState: aState [ 
 	| position incomingPosition |
 	position := self positionAt: aState.
 	incomingPosition := self positionAt: aState incoming.

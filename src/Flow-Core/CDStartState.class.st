@@ -1,37 +1,37 @@
 Class {
-	#name : #StartState,
-	#superclass : #StateObject,
+	#name : #CDStartState,
+	#superclass : #CDStateObject,
 	#category : #'Flow-Core'
 }
 
 { #category : #'as yet unclassified' }
-StartState class >> stateObjectName [
+CDStartState class >> stateObjectName [
 	^ #start
 ]
 
 { #category : #visiting }
-StartState >> acceptStateVisitor: aStateObjectVisitor [ 
+CDStartState >> acceptStateVisitor: aStateObjectVisitor [ 
 	^ aStateObjectVisitor visitStartState: self
 ]
 
 { #category : #accessing }
-StartState >> outgoing [
+CDStartState >> outgoing [
 	^ outgoing
 ]
 
 { #category : #accessing }
-StartState >> outgoing: anObject [
+CDStartState >> outgoing: anObject [
 	anObject incoming: self.
 	outgoing := anObject
 ]
 
 { #category : #'as yet unclassified' }
-StartState >> resolve: aClass [ 
+CDStartState >> resolve: aClass [ 
 	self shouldBeImplemented.
 ]
 
 { #category : #'as yet unclassified' }
-StartState >> shape [
+CDStartState >> shape [
 	| shapeBuilder labelShape |
 	shapeBuilder := RSMultilineLabelBuilder new.
 	shapeBuilder labelShape

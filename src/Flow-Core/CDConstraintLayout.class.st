@@ -1,5 +1,5 @@
 Class {
-	#name : #FCConstraintLayout,
+	#name : #CDConstraintLayout,
 	#superclass : #RSLayout,
 	#instVars : [
 		'edges',
@@ -9,7 +9,7 @@ Class {
 }
 
 { #category : #hook }
-FCConstraintLayout >> doExecute: elements [ 
+CDConstraintLayout >> doExecute: elements [ 
 	| position |
 	elements do: [ :element |
 		element @ RSDraggable.
@@ -19,11 +19,11 @@ FCConstraintLayout >> doExecute: elements [
 ]
 
 { #category : #accessing }
-FCConstraintLayout >> edges: aCollection [ 
+CDConstraintLayout >> edges: aCollection [ 
 	edges := aCollection
 ]
 
 { #category : #accessing }
-FCConstraintLayout >> positions: aCollection [ 
+CDConstraintLayout >> positions: aCollection [ 
 	positions := aCollection 
 ]

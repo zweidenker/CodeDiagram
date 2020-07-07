@@ -1,6 +1,6 @@
 Class {
-	#name : #State,
-	#superclass : #StateObject,
+	#name : #CDAction,
+	#superclass : #CDStateObject,
 	#instVars : [
 		'incoming'
 	],
@@ -8,22 +8,22 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
-State class >> stateObjectName [
-	^ #state
+CDAction class >> stateObjectName [
+	^ #action
 ]
 
 { #category : #visiting }
-State >> acceptStateVisitor: aStateObjectVisitor [ 
-	^ aStateObjectVisitor visitState: self
+CDAction >> acceptStateVisitor: aStateObjectVisitor [ 
+	^ aStateObjectVisitor visitAction: self
 ]
 
 { #category : #accessing }
-State >> incoming [
+CDAction >> incoming [
 	^ incoming
 ]
 
 { #category : #accessing }
-State >> incoming: anObject [
+CDAction >> incoming: anObject [
 	incoming ifNil: [
 		incoming := anObject.  
 		(anObject respondsTo: #outgoing:) ifTrue: [ 
@@ -32,28 +32,21 @@ State >> incoming: anObject [
 ]
 
 { #category : #accessing }
-State >> outgoing [
+CDAction >> outgoing [
 	^ outgoing
 ]
 
 { #category : #accessing }
-State >> outgoing: anObject [
+CDAction >> outgoing: anObject [
 	outgoing := anObject
 ]
 
 { #category : #'as yet unclassified' }
-State >> resolve: aString outgoing: aCollection in: aBuilder [ 
-	outgoing := aBuilder resolve: aString outgoing: aCollection.
-	outgoing incoming: self.
-]
-
-{ #category : #'as yet unclassified' }
-State >> shape [
+CDAction >> shape [
 	| shapeBuilder labelShape |
 	shapeBuilder := RSMultilineLabelBuilder new.
 	shapeBuilder labelShape
-		fontSize: self fontSize;
-		bold.
+		fontSize: self fontSize.
 	labelShape := (shapeBuilder shapeFor: label).
 
 	^ RSComposite new 
@@ -63,9 +56,9 @@ State >> shape [
 				size: self shapeSize; 
 				cornerRadius: (self shapeSize / 10);
 				border: self border;
-				color: Color lightBlue. 
+				color: Color lightYellow. 
 		labelShape
 			"RSLabel new 
 				text: label;
-				fontSize: 8" }
+				fontSize: 11" }
 ]
