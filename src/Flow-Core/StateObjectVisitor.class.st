@@ -50,27 +50,6 @@ StateObjectVisitor >> positionAt: aState [
 				@ (ClVariable newWith: 0 name: aState asString, ':Y') ]
 ]
 
-{ #category : #visiting }
-StateObjectVisitor >> positionConstraint: position down: downPosition [
-
-	solver
-		addConstraint: (downPosition y cnGEQ: position y + self rowSize strength: ClStrength strong)
-]
-
-{ #category : #visiting }
-StateObjectVisitor >> positionConstraint: position right: rightPosition [
-
-	solver
-		addConstraint: (rightPosition x cnGEQ: position x + self columnSize strength: ClStrength strong)
-]
-
-{ #category : #visiting }
-StateObjectVisitor >> positionConstraint: position right: rightPosition strength: aStrength [
-
-	solver
-		addConstraint: (rightPosition x cnGEQ: position x + self columnSize strength: aStrength)
-]
-
 { #category : #accessing }
 StateObjectVisitor >> positions [
 	^ positions
@@ -147,14 +126,25 @@ StateObjectVisitor >> visitCondition: aCondition [
 	solver 
 		addConstraint: (position y cnEqual: yesPosition y strength: ClStrength required);
 		addConstraint: (position x cnEqual: noPosition x strength: ClStrength required);
-		addConstraint: (position x cnEqual: incomingPosition x strength: ClStrength required);
-		addConstraint: (position y + self rowSize cnGEQ: noPosition y strength: ClStrength required);
+		addConstraint: (yesPosition x cnGEQ: position x + self columnSize strength: ClStrength required);
+		addConstraint: (noPosition y cnGEQ: position y + self rowSize strength: ClStrength strong);
 		addConstraint: (position y cnGEQ: incomingPosition y + self rowSize strength: ClStrength medium).
 	edges add: (aCondition -> (aCondition yes)).
 	edges add: (aCondition -> (aCondition no)).
 
 	self visit: aCondition yes.
 	self visit: aCondition no.
+]
+
+{ #category : #visiting }
+StateObjectVisitor >> visitEnd: anEndState [ 
+	| position incomingPosition |
+	position := self positionAt: anEndState.
+	incomingPosition := self positionAt: anEndState incoming.
+	self solver
+		addConstraint: (position x cnEqual: incomingPosition x + (anEndState incoming shape width / 2) strength: ClStrength strong);
+		addConstraint: (position y cnGEQ: incomingPosition y + self rowSize strength: ClStrength strong).
+
 ]
 
 { #category : #visiting }
@@ -176,7 +166,7 @@ StateObjectVisitor >> visitState: aState [
 	position := self positionAt: aState.
 	incomingPosition := self positionAt: aState incoming.
 	solver 
-		addConstraint: (position x cnEqual: incomingPosition x strength: ClStrength strong);
+		"addConstraint: (position x cnEqual: incomingPosition x strength: ClStrength strong);"
 		addConstraint: (position y cnGEQ: incomingPosition y + self rowSize strength: ClStrength medium).
 		
 	aState outgoing ifNotNil: [ 

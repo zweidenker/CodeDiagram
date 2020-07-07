@@ -2,11 +2,15 @@ Class {
 	#name : #State,
 	#superclass : #StateObject,
 	#instVars : [
-		'incoming',
-		'outgoing'
+		'incoming'
 	],
 	#category : #'Flow-Core'
 }
+
+{ #category : #'as yet unclassified' }
+State class >> stateObjectName [
+	^ #state
+]
 
 { #category : #visiting }
 State >> acceptStateVisitor: aStateObjectVisitor [ 
@@ -35,6 +39,12 @@ State >> outgoing [
 { #category : #accessing }
 State >> outgoing: anObject [
 	outgoing := anObject
+]
+
+{ #category : #'as yet unclassified' }
+State >> resolve: aString outgoing: aCollection in: aBuilder [ 
+	outgoing := aBuilder resolve: aString outgoing: aCollection.
+	outgoing incoming: self.
 ]
 
 { #category : #'as yet unclassified' }

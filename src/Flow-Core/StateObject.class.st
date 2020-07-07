@@ -3,7 +3,7 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'label',
-		'one'
+		'outgoing'
 	],
 	#category : #'Flow-Core'
 }
@@ -12,6 +12,13 @@ Class {
 StateObject class >> labelled: aString [ 
 	^ self new 
 		label: aString
+]
+
+{ #category : #'instance creation' }
+StateObject class >> withName: aString [
+	^ self allSubclasses 
+		detect: [ :each | each stateObjectName = aString ]
+		ifNone: [  nil ]
 ]
 
 { #category : #accessing }
@@ -44,6 +51,12 @@ StateObject >> label: anObject [
 { #category : #printing }
 StateObject >> printOn: aStream [
 	aStream << self class name << ' - ' << label asString
+]
+
+{ #category : #'as yet unclassified' }
+StateObject >> resolve: flowName in: aCollection builder: aBuilder [ 
+	outgoing := aBuilder resolve: flowName outgoing: aCollection.
+	outgoing incoming: self.
 ]
 
 { #category : #accessing }

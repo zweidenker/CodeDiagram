@@ -1,11 +1,13 @@
 Class {
 	#name : #StartState,
 	#superclass : #StateObject,
-	#instVars : [
-		'outgoing'
-	],
 	#category : #'Flow-Core'
 }
+
+{ #category : #'as yet unclassified' }
+StartState class >> stateObjectName [
+	^ #start
+]
 
 { #category : #visiting }
 StartState >> acceptStateVisitor: aStateObjectVisitor [ 
@@ -21,6 +23,11 @@ StartState >> outgoing [
 StartState >> outgoing: anObject [
 	anObject incoming: self.
 	outgoing := anObject
+]
+
+{ #category : #'as yet unclassified' }
+StartState >> resolve: aClass [ 
+	self shouldBeImplemented.
 ]
 
 { #category : #'as yet unclassified' }
