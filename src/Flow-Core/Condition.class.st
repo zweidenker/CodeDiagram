@@ -9,6 +9,11 @@ Class {
 	#category : #'Flow-Core'
 }
 
+{ #category : #'as yet unclassified' }
+Condition class >> stateObjectName [
+	^ #condition
+]
+
 { #category : #visiting }
 Condition >> acceptStateVisitor: aStateObjectVisitor [ 
 	^ aStateObjectVisitor visitCondition: self
@@ -37,6 +42,14 @@ Condition >> no [
 Condition >> no: anObject [
 	anObject incoming: self.
 	no := anObject
+]
+
+{ #category : #'as yet unclassified' }
+Condition >> resolve: flowName in: aCollection builder: aBuilder [ 
+	yes := aBuilder resolve: flowName yes: (aCollection first: 2).
+	yes incoming: self.
+	no := aBuilder resolve: flowName no: (aCollection last: 2).
+	no incoming: self
 ]
 
 { #category : #accessing }

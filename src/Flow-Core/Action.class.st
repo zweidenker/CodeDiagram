@@ -2,11 +2,15 @@ Class {
 	#name : #Action,
 	#superclass : #StateObject,
 	#instVars : [
-		'incoming',
-		'outgoing'
+		'incoming'
 	],
 	#category : #'Flow-Core'
 }
+
+{ #category : #'as yet unclassified' }
+Action class >> stateObjectName [
+	^ #action
+]
 
 { #category : #visiting }
 Action >> acceptStateVisitor: aStateObjectVisitor [ 
