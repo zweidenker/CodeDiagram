@@ -1,5 +1,5 @@
 Class {
-	#name : #CDState,
+	#name : #CDTerminal,
 	#superclass : #CDStateObject,
 	#instVars : [
 		'incoming'
@@ -8,22 +8,22 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
-CDState class >> stateObjectName [
-	^ #state
+CDTerminal class >> stateObjectName [
+	^ #terminal
 ]
 
 { #category : #visiting }
-CDState >> acceptStateVisitor: aStateObjectVisitor [ 
+CDTerminal >> acceptStateVisitor: aStateObjectVisitor [ 
 	^ aStateObjectVisitor visitState: self
 ]
 
 { #category : #accessing }
-CDState >> incoming [
+CDTerminal >> incoming [
 	^ incoming
 ]
 
 { #category : #accessing }
-CDState >> incoming: anObject [
+CDTerminal >> incoming: anObject [
 	incoming ifNil: [
 		incoming := anObject.  
 		(anObject respondsTo: #outgoing:) ifTrue: [ 
@@ -32,23 +32,23 @@ CDState >> incoming: anObject [
 ]
 
 { #category : #accessing }
-CDState >> outgoing [
+CDTerminal >> outgoing [
 	^ outgoing
 ]
 
 { #category : #accessing }
-CDState >> outgoing: anObject [
+CDTerminal >> outgoing: anObject [
 	outgoing := anObject
 ]
 
 { #category : #'as yet unclassified' }
-CDState >> resolve: aString outgoing: aCollection in: aBuilder [ 
+CDTerminal >> resolve: aString outgoing: aCollection in: aBuilder [ 
 	outgoing := aBuilder resolve: aString outgoing: aCollection.
 	outgoing incoming: self.
 ]
 
 { #category : #'as yet unclassified' }
-CDState >> shape [
+CDTerminal >> shape [
 	| shapeBuilder labelShape |
 	shapeBuilder := RSMultilineLabelBuilder new.
 	shapeBuilder labelShape

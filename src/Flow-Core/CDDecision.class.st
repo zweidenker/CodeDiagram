@@ -1,5 +1,5 @@
 Class {
-	#name : #CDCondition,
+	#name : #CDDecision,
 	#superclass : #CDStateObject,
 	#instVars : [
 		'incoming',
@@ -10,22 +10,22 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
-CDCondition class >> stateObjectName [
-	^ #condition
+CDDecision class >> stateObjectName [
+	^ #decision
 ]
 
 { #category : #visiting }
-CDCondition >> acceptStateVisitor: aStateObjectVisitor [ 
+CDDecision >> acceptStateVisitor: aStateObjectVisitor [ 
 	^ aStateObjectVisitor visitCondition: self
 ]
 
 { #category : #accessing }
-CDCondition >> incoming [
+CDDecision >> incoming [
 	^ incoming
 ]
 
 { #category : #accessing }
-CDCondition >> incoming: anObject [
+CDDecision >> incoming: anObject [
 	incoming ifNil: [
 		incoming := anObject.  
 		(anObject respondsTo: #outgoing:) ifTrue: [ 
@@ -34,18 +34,18 @@ CDCondition >> incoming: anObject [
 ]
 
 { #category : #accessing }
-CDCondition >> no [
+CDDecision >> no [
 	^ no
 ]
 
 { #category : #accessing }
-CDCondition >> no: anObject [
+CDDecision >> no: anObject [
 	anObject incoming: self.
 	no := anObject
 ]
 
 { #category : #'as yet unclassified' }
-CDCondition >> resolve: flowName in: aCollection builder: aBuilder [ 
+CDDecision >> resolve: flowName in: aCollection builder: aBuilder [ 
 	yes := aBuilder resolve: flowName yes: (aCollection first: 2).
 	yes incoming: self.
 	no := aBuilder resolve: flowName no: (aCollection last: 2).
@@ -53,7 +53,7 @@ CDCondition >> resolve: flowName in: aCollection builder: aBuilder [
 ]
 
 { #category : #accessing }
-CDCondition >> shape [
+CDDecision >> shape [
 	| shapeBuilder labelShape |
 	shapeBuilder := RSMultilineLabelBuilder new.
 	shapeBuilder labelShape
@@ -74,12 +74,12 @@ CDCondition >> shape [
 ]
 
 { #category : #accessing }
-CDCondition >> yes [
+CDDecision >> yes [
 	^ yes
 ]
 
 { #category : #accessing }
-CDCondition >> yes: anObject [
+CDDecision >> yes: anObject [
 	anObject incoming: self.
 	yes := anObject
 ]

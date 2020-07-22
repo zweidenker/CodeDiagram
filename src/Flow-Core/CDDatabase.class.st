@@ -1,5 +1,5 @@
 Class {
-	#name : #CDAction,
+	#name : #CDDatabase,
 	#superclass : #CDStateObject,
 	#instVars : [
 		'incoming'
@@ -8,22 +8,22 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
-CDAction class >> stateObjectName [
-	^ #action
+CDDatabase class >> stateObjectName [
+	^ #database
 ]
 
 { #category : #visiting }
-CDAction >> acceptStateVisitor: aStateObjectVisitor [ 
+CDDatabase >> acceptStateVisitor: aStateObjectVisitor [ 
 	^ aStateObjectVisitor visitAction: self
 ]
 
 { #category : #accessing }
-CDAction >> incoming [
+CDDatabase >> incoming [
 	^ incoming
 ]
 
 { #category : #accessing }
-CDAction >> incoming: anObject [
+CDDatabase >> incoming: anObject [
 	incoming ifNil: [
 		incoming := anObject.  
 		(anObject respondsTo: #outgoing:) ifTrue: [ 
@@ -32,17 +32,17 @@ CDAction >> incoming: anObject [
 ]
 
 { #category : #accessing }
-CDAction >> outgoing [
+CDDatabase >> outgoing [
 	^ outgoing
 ]
 
 { #category : #accessing }
-CDAction >> outgoing: anObject [
+CDDatabase >> outgoing: anObject [
 	outgoing := anObject
 ]
 
 { #category : #'as yet unclassified' }
-CDAction >> shape [
+CDDatabase >> shape [
 	| shapeBuilder labelShape |
 	shapeBuilder := RSMultilineLabelBuilder new.
 	shapeBuilder labelShape
@@ -52,9 +52,8 @@ CDAction >> shape [
 	^ RSComposite new 
 		model: self;
 		shapes: {
-			RSShapeFactory box
+			RSShapeFactory ellipse
 				size: self shapeSize; 
-				cornerRadius: (self shapeSize / 10);
 				border: self border;
 				color: Color lightYellow. 
 		labelShape

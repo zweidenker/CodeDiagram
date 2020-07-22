@@ -32,7 +32,7 @@ CDFlowDiagram >> drawOn: canvas [
 		solver: visitor solver;
 		dimensions: visitor dimensions;
 		applyOn: canvas nodes. 
-	canvas edges do: [ :each | | c | (each model key isKindOf: CDCondition) ifTrue: [
+	canvas edges do: [ :each | | c | (each model key isKindOf: CDDecision) ifTrue: [
 		c := each model key.
 		(c yes = each model value) ifTrue: [ |lbl|
 			lbl := RSLabeled new model: 'YES'.
