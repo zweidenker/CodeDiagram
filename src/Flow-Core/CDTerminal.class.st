@@ -1,9 +1,6 @@
 Class {
 	#name : #CDTerminal,
-	#superclass : #CDStateObject,
-	#instVars : [
-		'incoming'
-	],
+	#superclass : #CDBlockObject,
 	#category : #'Flow-Core'
 }
 
@@ -17,34 +14,8 @@ CDTerminal >> acceptStateVisitor: aStateObjectVisitor [
 	^ aStateObjectVisitor visitState: self
 ]
 
-{ #category : #accessing }
-CDTerminal >> incoming [
-	^ incoming
-]
-
-{ #category : #accessing }
-CDTerminal >> incoming: anObject [
-	incoming ifNil: [
-		incoming := anObject.  
-		(anObject respondsTo: #outgoing:) ifTrue: [ 
-			anObject outgoing: self ].
-		 ]
-]
-
-{ #category : #accessing }
-CDTerminal >> outgoing [
-	^ outgoing
-]
-
-{ #category : #accessing }
-CDTerminal >> outgoing: anObject [
-	outgoing := anObject
-]
-
 { #category : #'as yet unclassified' }
-CDTerminal >> resolve: aString outgoing: aCollection in: aBuilder [ 
-	outgoing := aBuilder resolve: aString outgoing: aCollection.
-	outgoing incoming: self.
+CDTerminal >> resolve: aString in: aClass builder: aFCCodeModelBuilder [ 
 ]
 
 { #category : #'as yet unclassified' }
@@ -52,20 +23,16 @@ CDTerminal >> shape [
 	| shapeBuilder labelShape |
 	shapeBuilder := RSMultilineLabelBuilder new.
 	shapeBuilder labelShape
-		fontSize: self fontSize;
-		bold.
+		fontSize: self fontSize.
 	labelShape := (shapeBuilder shapeFor: label).
 
 	^ RSComposite new 
 		model: self;
 		shapes: {
-			RSShapeFactory box
-				size: self shapeSize; 
+			RSShapeFactory box 
 				cornerRadius: (self shapeSize / 10);
 				border: self border;
-				color: Color lightBlue. 
-		labelShape
-			"RSLabel new 
-				text: label;
-				fontSize: 8" }
+				color: self color;
+				extent: (Point x: labelShape width + 20 y: 150).
+		labelShape }
 ]

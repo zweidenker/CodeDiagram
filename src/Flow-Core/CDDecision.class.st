@@ -1,8 +1,7 @@
 Class {
 	#name : #CDDecision,
-	#superclass : #CDStateObject,
+	#superclass : #CDBlockObject,
 	#instVars : [
-		'incoming',
 		'yes',
 		'no'
 	],
@@ -17,20 +16,6 @@ CDDecision class >> stateObjectName [
 { #category : #visiting }
 CDDecision >> acceptStateVisitor: aStateObjectVisitor [ 
 	^ aStateObjectVisitor visitCondition: self
-]
-
-{ #category : #accessing }
-CDDecision >> incoming [
-	^ incoming
-]
-
-{ #category : #accessing }
-CDDecision >> incoming: anObject [
-	incoming ifNil: [
-		incoming := anObject.  
-		(anObject respondsTo: #outgoing:) ifTrue: [ 
-			anObject outgoing: self ].
-		 ]
 ]
 
 { #category : #accessing }
@@ -64,13 +49,10 @@ CDDecision >> shape [
 		model: self;
 		shapes: {
 			RSShapeFactory diamond
-				size: self shapeSize; 
+				size: labelShape width + 30; 
 				border: self border;
-				color: Color lightRed. 
-			labelShape
-			"RSLabel new 
-				text: label;
-				fontSize: 8" }
+				color: self color. 
+			labelShape }
 ]
 
 { #category : #accessing }

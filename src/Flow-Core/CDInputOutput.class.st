@@ -1,9 +1,6 @@
 Class {
 	#name : #CDInputOutput,
-	#superclass : #CDStateObject,
-	#instVars : [
-		'incoming'
-	],
+	#superclass : #CDBlockObject,
 	#category : #'Flow-Core'
 }
 
@@ -15,30 +12,6 @@ CDInputOutput class >> stateObjectName [
 { #category : #visiting }
 CDInputOutput >> acceptStateVisitor: aStateObjectVisitor [ 
 	^ aStateObjectVisitor visitAction: self
-]
-
-{ #category : #accessing }
-CDInputOutput >> incoming [
-	^ incoming
-]
-
-{ #category : #accessing }
-CDInputOutput >> incoming: anObject [
-	incoming ifNil: [
-		incoming := anObject.  
-		(anObject respondsTo: #outgoing:) ifTrue: [ 
-			anObject outgoing: self ].
-		 ]
-]
-
-{ #category : #accessing }
-CDInputOutput >> outgoing [
-	^ outgoing
-]
-
-{ #category : #accessing }
-CDInputOutput >> outgoing: anObject [
-	outgoing := anObject
 ]
 
 { #category : #'as yet unclassified' }
@@ -53,11 +26,8 @@ CDInputOutput >> shape [
 		model: self;
 		shapes: {
 			RSShapeFactory rhomboid
-				size: self shapeSize;
+				extent: (Point x: labelShape width + 200 y: 200);
 				border: self border;
-				color: Color lightYellow. 
-		labelShape
-			"RSLabel new 
-				text: label;
-				fontSize: 11" }
+				color: self color. 
+		labelShape }
 ]

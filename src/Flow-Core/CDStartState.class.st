@@ -1,6 +1,6 @@
 Class {
 	#name : #CDStartState,
-	#superclass : #CDStateObject,
+	#superclass : #CDBlockObject,
 	#category : #'Flow-Core'
 }
 
@@ -12,11 +12,6 @@ CDStartState class >> stateObjectName [
 { #category : #visiting }
 CDStartState >> acceptStateVisitor: aStateObjectVisitor [ 
 	^ aStateObjectVisitor visitStartState: self
-]
-
-{ #category : #accessing }
-CDStartState >> outgoing [
-	^ outgoing
 ]
 
 { #category : #accessing }
@@ -46,10 +41,7 @@ CDStartState >> shape [
 				size: self shapeSize; 
 				cornerRadius: (self shapeSize / 10);
 				border: self border;
-				color: Color lightGreen. 
-		labelShape
-			"RSLabel new 
-				text: label;
-				fontSize: 8" }
+				color: Color green. 
+		labelShape }
 	
 ]

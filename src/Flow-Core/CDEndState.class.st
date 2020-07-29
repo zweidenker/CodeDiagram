@@ -1,9 +1,6 @@
 Class {
 	#name : #CDEndState,
-	#superclass : #CDStateObject,
-	#instVars : [
-		'incoming'
-	],
+	#superclass : #CDBlockObject,
 	#category : #'Flow-Core'
 }
 
@@ -15,16 +12,6 @@ CDEndState class >> stateObjectName [
 { #category : #visiting }
 CDEndState >> acceptStateVisitor: aStateObjectVisitor [ 
 	^ aStateObjectVisitor visitEnd: self
-]
-
-{ #category : #accessing }
-CDEndState >> incoming [
-	^ incoming
-]
-
-{ #category : #accessing }
-CDEndState >> incoming: aState [ 
-	incoming := aState
 ]
 
 { #category : #'as yet unclassified' }
