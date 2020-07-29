@@ -1,5 +1,5 @@
 Class {
-	#name : #CDStateObjectVisitor,
+	#name : #CDBlockObjectVisitor,
 	#superclass : #Object,
 	#instVars : [
 		'solver',
@@ -11,7 +11,7 @@ Class {
 }
 
 { #category : #accessing }
-CDStateObjectVisitor >> dimensionAt: aState [ 
+CDBlockObjectVisitor >> dimensionAt: aState [ 
 	aState ifNil: [ Error signal: 'nil does not work' ].
 	^ self dimensions 
 		at: aState
@@ -20,22 +20,22 @@ CDStateObjectVisitor >> dimensionAt: aState [
 ]
 
 { #category : #accessing }
-CDStateObjectVisitor >> dimensions [ 
+CDBlockObjectVisitor >> dimensions [ 
 	^ dimensions 
 ]
 
 { #category : #accessing }
-CDStateObjectVisitor >> edges [
+CDBlockObjectVisitor >> edges [
 	^ edges
 ]
 
 { #category : #visiting }
-CDStateObjectVisitor >> horizontalGap [
+CDBlockObjectVisitor >> horizontalGap [
 	^ self shapeSize * 2
 ]
 
 { #category : #initialization }
-CDStateObjectVisitor >> initialize [ 	
+CDBlockObjectVisitor >> initialize [ 	
 	super initialize.
 	dimensions := Dictionary new.
 	solver := ClSimplexSolver new.
@@ -44,63 +44,63 @@ CDStateObjectVisitor >> initialize [
 ]
 
 { #category : #visiting }
-CDStateObjectVisitor >> layout: aState [ 
+CDBlockObjectVisitor >> layout: aState [ 
 	self visit: aState
 ]
 
 { #category : #accessing }
-CDStateObjectVisitor >> objects [
+CDBlockObjectVisitor >> objects [
 	^ dimensions keys
 ]
 
 { #category : #visiting }
-CDStateObjectVisitor >> position: next centerOf: prev strength: aNumber [
+CDBlockObjectVisitor >> position: next centerOf: prev strength: aNumber [
 	solver 
 		addConstraint: (prev x cnEqual: next x strength: aNumber).
 ]
 
 { #category : #visiting }
-CDStateObjectVisitor >> position: next leftOf: prev strength: aNumber [
+CDBlockObjectVisitor >> position: next leftOf: prev strength: aNumber [
 "	solver 
 		addConstraint: (prev x cnGEQ: next x + next width + self horizontalGap strength: aNumber)"
 	self position: prev rightOf: next strength: aNumber 
 ]
 
 { #category : #visiting }
-CDStateObjectVisitor >> position: next middleOf: prev strength: aNumber [
+CDBlockObjectVisitor >> position: next middleOf: prev strength: aNumber [
 	solver 
 		addConstraint: (prev y cnEqual: next y strength: aNumber).
 ]
 
 { #category : #visiting }
-CDStateObjectVisitor >> position: next rightOf: prev strength: aNumber [
+CDBlockObjectVisitor >> position: next rightOf: prev strength: aNumber [
 	solver 
 		addConstraint: (next x cnGEQ: prev x + self horizontalGap strength: aNumber)
 ]
 
 { #category : #visiting }
-CDStateObjectVisitor >> position: next under: prev strength: aNumber [
+CDBlockObjectVisitor >> position: next under: prev strength: aNumber [
 	solver 
 		addConstraint: (next y cnGEQ: prev y + "prev height + "self verticalGap strength: aNumber)
 ]
 
 { #category : #accessing }
-CDStateObjectVisitor >> shapeSize [
+CDBlockObjectVisitor >> shapeSize [
 	^ 150
 ]
 
 { #category : #accessing }
-CDStateObjectVisitor >> solver [
+CDBlockObjectVisitor >> solver [
 	^ solver
 ]
 
 { #category : #visiting }
-CDStateObjectVisitor >> verticalGap [
+CDBlockObjectVisitor >> verticalGap [
 	^ self shapeSize * 1.5
 ]
 
 { #category : #visiting }
-CDStateObjectVisitor >> visit: aState [ 
+CDBlockObjectVisitor >> visit: aState [ 
 	^ seen 
 		at: aState
 		ifAbsent: [ 
@@ -109,7 +109,7 @@ CDStateObjectVisitor >> visit: aState [
 ]
 
 { #category : #visiting }
-CDStateObjectVisitor >> visitAction: anAction [ 
+CDBlockObjectVisitor >> visitAction: anAction [ 
 	| action previous outgoingPosition |
 	action := self dimensionAt: anAction.
 	previous := self dimensionAt: anAction incoming.
@@ -128,7 +128,7 @@ CDStateObjectVisitor >> visitAction: anAction [
 ]
 
 { #category : #visiting }
-CDStateObjectVisitor >> visitCondition: aCondition [ 
+CDBlockObjectVisitor >> visitCondition: aCondition [ 
 	| condition yes no previous |
 	condition := self dimensionAt: aCondition.
 	yes := self dimensionAt: aCondition yes.
@@ -149,7 +149,7 @@ CDStateObjectVisitor >> visitCondition: aCondition [
 ]
 
 { #category : #visiting }
-CDStateObjectVisitor >> visitEnd: anEndState [ 
+CDBlockObjectVisitor >> visitEnd: anEndState [ 
 	| end previous |
 	end := self dimensionAt: anEndState.
 	previous := self dimensionAt: anEndState incoming.
@@ -163,7 +163,7 @@ CDStateObjectVisitor >> visitEnd: anEndState [
 ]
 
 { #category : #visiting }
-CDStateObjectVisitor >> visitStartState: aStartState [ 
+CDBlockObjectVisitor >> visitStartState: aStartState [ 
 	| start next |
 	start := self dimensionAt: aStartState.
 	next := self dimensionAt: aStartState outgoing.
@@ -175,7 +175,7 @@ CDStateObjectVisitor >> visitStartState: aStartState [
 ]
 
 { #category : #visiting }
-CDStateObjectVisitor >> visitState: aState [ 
+CDBlockObjectVisitor >> visitState: aState [ 
 	| state previous next |
 	state := self dimensionAt: aState.
 	previous := self dimensionAt: aState incoming.

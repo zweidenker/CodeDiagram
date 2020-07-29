@@ -1,8 +1,7 @@
 Class {
-	#name : #CDCondition,
-	#superclass : #CDStateObject,
+	#name : #CDDecision,
+	#superclass : #CDBlockObject,
 	#instVars : [
-		'incoming',
 		'yes',
 		'no'
 	],
@@ -10,42 +9,28 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
-CDCondition class >> stateObjectName [
-	^ #condition
+CDDecision class >> stateObjectName [
+	^ #decision
 ]
 
 { #category : #visiting }
-CDCondition >> acceptStateVisitor: aStateObjectVisitor [ 
+CDDecision >> acceptStateVisitor: aStateObjectVisitor [ 
 	^ aStateObjectVisitor visitCondition: self
 ]
 
 { #category : #accessing }
-CDCondition >> incoming [
-	^ incoming
-]
-
-{ #category : #accessing }
-CDCondition >> incoming: anObject [
-	incoming ifNil: [
-		incoming := anObject.  
-		(anObject respondsTo: #outgoing:) ifTrue: [ 
-			anObject outgoing: self ].
-		 ]
-]
-
-{ #category : #accessing }
-CDCondition >> no [
+CDDecision >> no [
 	^ no
 ]
 
 { #category : #accessing }
-CDCondition >> no: anObject [
+CDDecision >> no: anObject [
 	anObject incoming: self.
 	no := anObject
 ]
 
 { #category : #'as yet unclassified' }
-CDCondition >> resolve: flowName in: aCollection builder: aBuilder [ 
+CDDecision >> resolve: flowName in: aCollection builder: aBuilder [ 
 	yes := aBuilder resolve: flowName yes: (aCollection first: 2).
 	yes incoming: self.
 	no := aBuilder resolve: flowName no: (aCollection last: 2).
@@ -53,7 +38,7 @@ CDCondition >> resolve: flowName in: aCollection builder: aBuilder [
 ]
 
 { #category : #accessing }
-CDCondition >> shape [
+CDDecision >> shape [
 	| shapeBuilder labelShape |
 	shapeBuilder := RSMultilineLabelBuilder new.
 	shapeBuilder labelShape
@@ -64,22 +49,19 @@ CDCondition >> shape [
 		model: self;
 		shapes: {
 			RSShapeFactory diamond
-				size: self shapeSize; 
+				size: labelShape width + 30; 
 				border: self border;
-				color: Color lightRed. 
-			labelShape
-			"RSLabel new 
-				text: label;
-				fontSize: 8" }
+				color: self color. 
+			labelShape }
 ]
 
 { #category : #accessing }
-CDCondition >> yes [
+CDDecision >> yes [
 	^ yes
 ]
 
 { #category : #accessing }
-CDCondition >> yes: anObject [
+CDDecision >> yes: anObject [
 	anObject incoming: self.
 	yes := anObject
 ]

@@ -1,47 +1,38 @@
 Class {
-	#name : #CDStartState,
+	#name : #CDTerminal,
 	#superclass : #CDBlockObject,
 	#category : #'Flow-Core'
 }
 
 { #category : #'as yet unclassified' }
-CDStartState class >> stateObjectName [
-	^ #start
+CDTerminal class >> stateObjectName [
+	^ #terminal
 ]
 
 { #category : #visiting }
-CDStartState >> acceptStateVisitor: aStateObjectVisitor [ 
-	^ aStateObjectVisitor visitStartState: self
-]
-
-{ #category : #accessing }
-CDStartState >> outgoing: anObject [
-	anObject incoming: self.
-	outgoing := anObject
+CDTerminal >> acceptStateVisitor: aStateObjectVisitor [ 
+	^ aStateObjectVisitor visitState: self
 ]
 
 { #category : #'as yet unclassified' }
-CDStartState >> resolve: aClass [ 
-	self shouldBeImplemented.
+CDTerminal >> resolve: aString in: aClass builder: aFCCodeModelBuilder [ 
 ]
 
 { #category : #'as yet unclassified' }
-CDStartState >> shape [
+CDTerminal >> shape [
 	| shapeBuilder labelShape |
 	shapeBuilder := RSMultilineLabelBuilder new.
 	shapeBuilder labelShape
-		fontSize: self fontSize;
-		bold.
+		fontSize: self fontSize.
 	labelShape := (shapeBuilder shapeFor: label).
 
 	^ RSComposite new 
 		model: self;
 		shapes: {
-			RSShapeFactory box
-				size: self shapeSize; 
+			RSShapeFactory box 
 				cornerRadius: (self shapeSize / 10);
 				border: self border;
-				color: Color green. 
+				color: self color;
+				extent: (Point x: labelShape width + 20 y: 150).
 		labelShape }
-	
 ]

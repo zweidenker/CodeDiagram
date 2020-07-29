@@ -17,13 +17,13 @@ CDFlowDiagram class >> startAt: aClass method: aString [
 CDFlowDiagram >> drawOn: canvas [
 
 	| visitor  eb |
-	visitor := CDStateObjectVisitor new.
+	visitor := CDBlockObjectVisitor new.
 	visitor layout: model.
 	visitor.
 	visitor objects do: [ :object |
 		canvas add: object shape ].
 
-	eb := (RSEdgeBuilder orthoVertical) withBorderAttachPoint.
+	eb := (RSEdgeBuilder arrowedLine) withBorderAttachPoint; width: 3.
 	eb canvas: canvas.
 	eb shapes: canvas nodes.
 	eb useAssociations: visitor edges.
@@ -32,7 +32,7 @@ CDFlowDiagram >> drawOn: canvas [
 		solver: visitor solver;
 		dimensions: visitor dimensions;
 		applyOn: canvas nodes. 
-	canvas edges do: [ :each | | c | (each model key isKindOf: CDCondition) ifTrue: [
+	canvas edges do: [ :each | | c | (each model key isKindOf: CDDecision) ifTrue: [
 		c := each model key.
 		(c yes = each model value) ifTrue: [ |lbl|
 			lbl := RSLabeled new model: 'YES'.
