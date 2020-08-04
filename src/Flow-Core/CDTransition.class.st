@@ -1,21 +1,21 @@
 Class {
-	#name : #CDProcess,
+	#name : #CDTransition,
 	#superclass : #CDBlockObject,
 	#category : #'Flow-Core'
 }
 
 { #category : #'as yet unclassified' }
-CDProcess class >> stateObjectName [
-	^ #process
+CDTransition class >> stateObjectName [
+	^ #transition
 ]
 
 { #category : #visiting }
-CDProcess >> acceptStateVisitor: aStateObjectVisitor [ 
+CDTransition >> acceptStateVisitor: aStateObjectVisitor [ 
 	^ aStateObjectVisitor visitAction: self
 ]
 
 { #category : #'as yet unclassified' }
-CDProcess >> shape [
+CDTransition >> shape [
 	| shapeBuilder labelShape |
 	shapeBuilder := RSMultilineLabelBuilder new.
 	shapeBuilder labelShape
