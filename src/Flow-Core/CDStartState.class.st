@@ -27,21 +27,10 @@ CDStartState >> resolve: aClass [
 
 { #category : #'as yet unclassified' }
 CDStartState >> shape [
-	| shapeBuilder labelShape |
-	shapeBuilder := RSMultilineLabelBuilder new.
-	shapeBuilder labelShape
-		fontSize: self fontSize;
-		bold.
-	labelShape := (shapeBuilder shapeFor: label).
-
-	^ RSComposite new 
+	^ RSEllipse new 
 		model: self;
-		shapes: {
-			RSShapeFactory box
-				size: self shapeSize; 
-				cornerRadius: (self shapeSize / 10);
-				border: self border;
-				color: Color green. 
-		labelShape }
+		size: 50;
+		color: Color green;
+		yourself
 	
 ]
