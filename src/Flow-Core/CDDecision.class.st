@@ -51,7 +51,7 @@ CDDecision >> shape [
 			RSShapeFactory diamond
 				size: labelShape width + 30; 
 				border: self border;
-				color: self color. 
+				color: #lightYellow 
 			labelShape }
 ]
 

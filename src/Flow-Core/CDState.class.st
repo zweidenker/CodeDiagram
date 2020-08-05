@@ -28,7 +28,7 @@ CDState >> shape [
 			RSShapeFactory box 
 				cornerRadius: (self shapeSize / 10);
 				border: self border;
-				color: self color;
+				color: #lightBlue;
 				extent: (Point x: labelShape width + 20 y: 150).
 		labelShape }
 ]

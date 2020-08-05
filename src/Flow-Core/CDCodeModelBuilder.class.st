@@ -8,17 +8,10 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
-CDCodeModelBuilder >> colorFromPragma: pragma [
-	| colorString |
-	colorString := pragma arguments at: 4 ifAbsent: [ #lightYellow ].
-	^ (Color fromString: colorString) alpha: 0.7
-]
-
-{ #category : #'as yet unclassified' }
 CDCodeModelBuilder >> flowPragmas: aMethod [
 	| pragmas |
 	pragmas := aMethod pragmas 
-		select: [ :p | p selector includesSubstring: #flow:element:outgoing: ].
+		select: [ :p | p selector = #flow:element:outgoing: ].
 	pragmas ifEmpty: [ CDPragmaNotFound signal ].
 	^ pragmas 
 ]
@@ -46,7 +39,6 @@ CDCodeModelBuilder >> resolveFrom: aPragma outgoing: aCollection [
 
 	state := (CDBlockObject withName: nextPragma arguments second) new.
 	state label: nextPragma arguments first.
-	state color: (self colorFromPragma: nextPragma).
 
 	^ state 
 		resolveFrom: nextPragma

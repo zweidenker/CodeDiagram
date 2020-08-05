@@ -28,9 +28,6 @@ CDTransition >> shape [
 			RSShapeFactory rectangle
 				extent: (Point x: labelShape width + 20 y: 150);
 				border: self border;
-				color: self color. 
-		labelShape
-			"RSLabel new 
-				text: label;
-				fontSize: 11" }
+				color: #lightYellow. 
+		labelShape }
 ]
