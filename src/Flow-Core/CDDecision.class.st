@@ -1,10 +1,6 @@
 Class {
 	#name : #CDDecision,
-	#superclass : #CDBlockObject,
-	#instVars : [
-		'yes',
-		'no'
-	],
+	#superclass : #CDTransitionFork,
 	#category : #'Flow-Core'
 }
 
@@ -13,28 +9,9 @@ CDDecision class >> stateObjectName [
 	^ #decision
 ]
 
-{ #category : #visiting }
-CDDecision >> acceptStateVisitor: aStateObjectVisitor [ 
-	^ aStateObjectVisitor visitCondition: self
-]
-
 { #category : #accessing }
 CDDecision >> no [
-	^ no
-]
-
-{ #category : #accessing }
-CDDecision >> no: anObject [
-	anObject incoming: self.
-	no := anObject
-]
-
-{ #category : #'as yet unclassified' }
-CDDecision >> resolve: flowName in: aCollection builder: aBuilder [ 
-	yes := aBuilder resolve: flowName yes: (aCollection first: 2).
-	yes incoming: self.
-	no := aBuilder resolve: flowName no: (aCollection last: 2).
-	no incoming: self
+	^ secondBranch
 ]
 
 { #category : #accessing }
@@ -57,11 +34,5 @@ CDDecision >> shape [
 
 { #category : #accessing }
 CDDecision >> yes [
-	^ yes
-]
-
-{ #category : #accessing }
-CDDecision >> yes: anObject [
-	anObject incoming: self.
-	yes := anObject
+	^ firstBranch
 ]
