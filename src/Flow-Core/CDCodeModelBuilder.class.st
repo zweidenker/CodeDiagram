@@ -13,11 +13,6 @@ CDCodeModelBuilder >> model [
 ]
 
 { #category : #'as yet unclassified' }
-CDCodeModelBuilder >> resolve: flowName no: aCollection [
-	^ self resolve: flowName outgoing: aCollection 
-]
-
-{ #category : #'as yet unclassified' }
 CDCodeModelBuilder >> resolve: aString outgoing: aCollection [ 
 	| method pragma state |
 	method := self resolveMethod: aCollection.
@@ -29,11 +24,6 @@ CDCodeModelBuilder >> resolve: aString outgoing: aCollection [
 		resolve: pragma arguments first
 		in: pragma arguments third
 		builder: self
-]
-
-{ #category : #'as yet unclassified' }
-CDCodeModelBuilder >> resolve: flowName yes: aCollection [
-	^ self resolve: flowName outgoing: aCollection 
 ]
 
 { #category : #'as yet unclassified' }

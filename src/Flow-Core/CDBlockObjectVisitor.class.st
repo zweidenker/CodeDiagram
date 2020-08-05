@@ -128,27 +128,6 @@ CDBlockObjectVisitor >> visitAction: anAction [
 ]
 
 { #category : #visiting }
-CDBlockObjectVisitor >> visitCondition: aCondition [ 
-	| condition yes no previous |
-	condition := self dimensionAt: aCondition.
-	yes := self dimensionAt: aCondition yes.
-	no := self dimensionAt: aCondition no.
-	previous := self dimensionAt: aCondition incoming. 
-	self 
-		position: yes rightOf: condition strength: ClStrength strong;
-		position: yes middleOf: condition strength: ClStrength strong; 
-		position: no under: condition strength: ClStrength strong;
-		position: no centerOf: condition strength: ClStrength strong;
-		position: condition under: previous strength: ClStrength strong. 
-
-	edges add: (aCondition -> (aCondition yes)).
-	edges add: (aCondition -> (aCondition no)).
-
-	self visit: aCondition yes.
-	self visit: aCondition no.
-]
-
-{ #category : #visiting }
 CDBlockObjectVisitor >> visitEnd: anEndState [ 
 	| end previous |
 	end := self dimensionAt: anEndState.
@@ -160,6 +139,27 @@ CDBlockObjectVisitor >> visitEnd: anEndState [
 		addConstraint: (position x cnEqual: incomingPosition x + (anEndState incoming shape width / 2) strength: ClStrength strong);
 		addConstraint: (position y cnGEQ: incomingPosition y + self verticalGap strength: ClStrength strong).
 "
+]
+
+{ #category : #visiting }
+CDBlockObjectVisitor >> visitFork: aFork [ 
+	| condition firstBranch secondBranch previous |
+	condition := self dimensionAt: aFork.
+	firstBranch := self dimensionAt: aFork firstBranch.
+	secondBranch := self dimensionAt: aFork secondBranch.
+	previous := self dimensionAt: aFork incoming. 
+	self 
+		position: firstBranch rightOf: condition strength: ClStrength strong;
+		position: firstBranch middleOf: condition strength: ClStrength strong; 
+		position: secondBranch under: condition strength: ClStrength strong;
+		position: secondBranch centerOf: condition strength: ClStrength strong;
+		position: condition under: previous strength: ClStrength strong. 
+
+	edges add: (aFork -> (aFork firstBranch)).
+	edges add: (aFork -> (aFork secondBranch)).
+
+	self visit: aFork firstBranch.
+	self visit: aFork secondBranch.
 ]
 
 { #category : #visiting }
