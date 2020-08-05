@@ -1,21 +1,21 @@
 Class {
-	#name : #CDProcess,
+	#name : #CDTransition,
 	#superclass : #CDBlockObject,
 	#category : #'Flow-Core'
 }
 
 { #category : #'as yet unclassified' }
-CDProcess class >> stateObjectName [
-	^ #process
+CDTransition class >> stateObjectName [
+	^ #transition
 ]
 
 { #category : #visiting }
-CDProcess >> acceptStateVisitor: aStateObjectVisitor [ 
+CDTransition >> acceptStateVisitor: aStateObjectVisitor [ 
 	^ aStateObjectVisitor visitAction: self
 ]
 
 { #category : #'as yet unclassified' }
-CDProcess >> shape [
+CDTransition >> shape [
 	| shapeBuilder labelShape |
 	shapeBuilder := RSMultilineLabelBuilder new.
 	shapeBuilder labelShape
@@ -28,9 +28,6 @@ CDProcess >> shape [
 			RSShapeFactory rectangle
 				extent: (Point x: labelShape width + 20 y: 150);
 				border: self border;
-				color: self color. 
-		labelShape
-			"RSLabel new 
-				text: label;
-				fontSize: 11" }
+				color: #lightYellow 
+		labelShape}
 ]

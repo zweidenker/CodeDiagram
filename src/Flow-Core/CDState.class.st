@@ -1,25 +1,21 @@
 Class {
-	#name : #CDTerminal,
+	#name : #CDState,
 	#superclass : #CDBlockObject,
 	#category : #'Flow-Core'
 }
 
 { #category : #'as yet unclassified' }
-CDTerminal class >> stateObjectName [
-	^ #terminal
+CDState class >> stateObjectName [
+	^ #state
 ]
 
 { #category : #visiting }
-CDTerminal >> acceptStateVisitor: aStateObjectVisitor [ 
+CDState >> acceptStateVisitor: aStateObjectVisitor [ 
 	^ aStateObjectVisitor visitState: self
 ]
 
 { #category : #'as yet unclassified' }
-CDTerminal >> resolve: aString in: aClass builder: aFCCodeModelBuilder [ 
-]
-
-{ #category : #'as yet unclassified' }
-CDTerminal >> shape [
+CDState >> shape [
 	| shapeBuilder labelShape |
 	shapeBuilder := RSMultilineLabelBuilder new.
 	shapeBuilder labelShape
@@ -32,7 +28,7 @@ CDTerminal >> shape [
 			RSShapeFactory box 
 				cornerRadius: (self shapeSize / 10);
 				border: self border;
-				color: self color;
+				color: #lightBlue;
 				extent: (Point x: labelShape width + 20 y: 150).
 		labelShape }
 ]
