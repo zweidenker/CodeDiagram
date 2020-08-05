@@ -8,28 +8,43 @@ Class {
 }
 
 { #category : #'as yet unclassified' }
+CDCodeModelBuilder >> flowPragmas: aMethod [
+	| pragmas |
+	pragmas := aMethod pragmas 
+		select: [ :p | p selector = #flow:element:outgoing: ].
+	pragmas ifEmpty: [ CDPragmaNotFound signal ].
+	^ pragmas
+]
+
+{ #category : #'as yet unclassified' }
 CDCodeModelBuilder >> model [
 	^ startState
 ]
 
 { #category : #'as yet unclassified' }
-CDCodeModelBuilder >> resolve: aString outgoing: aCollection [ 
-	| method pragma state |
-	method := self resolveMethod: aCollection.
-	pragma := (method pragmaAt: #flow:element:outgoing:) 
-	pragma ifNil: [ CDPragmaNotFound signal ].
-	state := (CDBlockObject withName: pragma arguments second) new.
-	state label: pragma arguments first.
+CDCodeModelBuilder >> resolveFrom: aPragma outgoing: aCollection [ 
+	| method pragmas nextPragma state |
+	method := self resolveMethod: aCollection from: aPragma.
+	pragmas := (self flowPragmas: method).
+	
+	nextPragma := pragmas 
+		after: aPragma
+		ifAbsent: [  pragmas first ].
+
+	state := (CDBlockObject withName: nextPragma arguments second) new.
+	state label: nextPragma arguments first.
+
 	^ state 
-		resolve: pragma arguments first
-		in: pragma arguments third
+		resolveFrom: nextPragma
+		in: nextPragma arguments third
 		builder: self
 ]
 
 { #category : #'as yet unclassified' }
-CDCodeModelBuilder >> resolveMethod: aCollection [ 
+CDCodeModelBuilder >> resolveMethod: aCollection from: aPragma [
 	| targetClass |
-	self assert: aCollection size = 2.
+	(aCollection = #self) 
+		ifTrue: [ ^ aPragma method ].
 	targetClass := self class environment at: aCollection first.
 	^ targetClass >> aCollection second
 ]
@@ -39,5 +54,5 @@ CDCodeModelBuilder >> startAt: aClass method: aString [
 
 	
 	startState := CDStartState labelled: 'Start'.
-	startState resolve: #start in: { aClass name . aString } builder: self.
+	startState resolveFrom: #start in: { aClass name . aString } builder: self.
 ]
