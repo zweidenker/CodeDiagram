@@ -15,6 +15,11 @@ CDEndState >> acceptStateVisitor: aStateObjectVisitor [
 ]
 
 { #category : #'as yet unclassified' }
+CDEndState >> resolve: flowName in: aCollection at: index builder: aBuilder [ 
+	
+]
+
+{ #category : #'as yet unclassified' }
 CDEndState >> resolveFrom: aString in: aClass builder: aFCCodeModelBuilder [ 
 	
 ]

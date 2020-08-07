@@ -22,6 +22,26 @@ CDCodeModelBuilder >> model [
 ]
 
 { #category : #'as yet unclassified' }
+CDCodeModelBuilder >> resolve: flowName outgoing: aCollection at: pragmaIndex [
+	| method pragma state |
+	method := self resolveMethod: aCollection.
+	pragma := (self flowPragmas: method) at: pragmaIndex.
+	state := (CDBlockObject withName: pragma arguments second) new.
+	state label: pragma arguments first.
+	^ pragma arguments third = #self
+		ifTrue: [ state
+				resolve: pragma arguments first
+				in: aCollection
+				at: pragmaIndex + 1
+				builder: self ]
+		ifFalse: [ state
+				resolve: pragma arguments first
+				in: pragma arguments third
+				at: 1
+				builder: self ]
+]
+
+{ #category : #'as yet unclassified' }
 CDCodeModelBuilder >> resolveFrom: aPragma outgoing: aCollection [ 
 	| method pragmas nextPragma state |
 	method := self resolveMethod: aCollection from: aPragma.
@@ -38,6 +58,14 @@ CDCodeModelBuilder >> resolveFrom: aPragma outgoing: aCollection [
 		resolveFrom: nextPragma
 		in: nextPragma arguments third
 		builder: self
+]
+
+{ #category : #'as yet unclassified' }
+CDCodeModelBuilder >> resolveMethod: aCollection [ 
+
+	| targetClass |
+	targetClass := self class environment at: aCollection first.
+	^ targetClass >> aCollection second
 ]
 
 { #category : #'as yet unclassified' }
