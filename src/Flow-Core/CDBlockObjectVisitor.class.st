@@ -128,6 +128,12 @@ CDBlockObjectVisitor >> visitAction: anAction [
 ]
 
 { #category : #visiting }
+CDBlockObjectVisitor >> visitDecision: aDecision [ 
+
+	self visitSplittingBlock: aDecision
+]
+
+{ #category : #visiting }
 CDBlockObjectVisitor >> visitEnd: anEndState [ 
 	| end previous |
 	end := self dimensionAt: anEndState.
@@ -143,11 +149,17 @@ CDBlockObjectVisitor >> visitEnd: anEndState [
 
 { #category : #visiting }
 CDBlockObjectVisitor >> visitFork: aFork [ 
+
+	self visitSplittingBlock: aFork
+]
+
+{ #category : #visiting }
+CDBlockObjectVisitor >> visitSplittingBlock: aSplittingBlock [ 
 	| condition firstBranch secondBranch previous |
-	condition := self dimensionAt: aFork.
-	firstBranch := self dimensionAt: aFork firstBranch.
-	secondBranch := self dimensionAt: aFork secondBranch.
-	previous := self dimensionAt: aFork incoming. 
+	condition := self dimensionAt: aSplittingBlock.
+	firstBranch := self dimensionAt: aSplittingBlock firstBranch.
+	secondBranch := self dimensionAt: aSplittingBlock secondBranch.
+	previous := self dimensionAt: aSplittingBlock incoming. 
 	self 
 		position: firstBranch rightOf: condition strength: ClStrength strong;
 		position: firstBranch middleOf: condition strength: ClStrength strong; 
@@ -155,11 +167,11 @@ CDBlockObjectVisitor >> visitFork: aFork [
 		position: secondBranch centerOf: condition strength: ClStrength strong;
 		position: condition under: previous strength: ClStrength strong. 
 
-	edges add: (aFork -> (aFork firstBranch)).
-	edges add: (aFork -> (aFork secondBranch)).
+	edges add: (aSplittingBlock -> (aSplittingBlock firstBranch)).
+	edges add: (aSplittingBlock -> (aSplittingBlock secondBranch)).
 
-	self visit: aFork firstBranch.
-	self visit: aFork secondBranch.
+	self visit: aSplittingBlock firstBranch.
+	self visit: aSplittingBlock secondBranch.
 ]
 
 { #category : #visiting }
