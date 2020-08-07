@@ -90,14 +90,8 @@ CDBlockObject >> printOn: aStream [
 ]
 
 { #category : #'as yet unclassified' }
-CDBlockObject >> resolve: flowName in: aCollection at: index builder: aBuilder [ 
-	outgoing := aBuilder resolve: flowName outgoing: aCollection at: index.
-	outgoing incoming: self.
-]
-
-{ #category : #'as yet unclassified' }
-CDBlockObject >> resolveFrom: aPragma in: aCollection builder: aBuilder [ 
-	outgoing := aBuilder resolveFrom: aPragma outgoing: aCollection.
+CDBlockObject >> resolveOutgoing:  aCollection at: index builder: aBuilder [ 
+	outgoing := aBuilder resolveOutgoing: aCollection at: index.
 	outgoing incoming: self.
 ]
 

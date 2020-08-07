@@ -30,10 +30,10 @@ CDTransitionFork >> firstBranch: anObject [
 ]
 
 { #category : #visiting }
-CDTransitionFork >> resolveFrom: aPragma in: aCollection builder: aBuilder [
-	firstBranch := aBuilder resolveFrom: aPragma outgoing: (aCollection first: 2).
+CDTransitionFork >> resolveOutgoing: aCollection at: index builder: aBuilder [
+	firstBranch := aBuilder resolveOutgoing: (aCollection first: 2) at: index.
 	firstBranch incoming: self.
-	secondBranch := aBuilder resolveFrom: aPragma outgoing: (aCollection last: 2).
+	secondBranch := aBuilder resolveOutgoing:  (aCollection last: 2) at: index.
 	secondBranch incoming: self
 ]
 
