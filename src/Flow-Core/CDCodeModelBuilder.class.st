@@ -2,10 +2,17 @@ Class {
 	#name : #CDCodeModelBuilder,
 	#superclass : #Object,
 	#instVars : [
-		'startState'
+		'startState',
+		'blocks'
 	],
 	#category : #'Flow-Core'
 }
+
+{ #category : #'as yet unclassified' }
+CDCodeModelBuilder >> blocks [ 
+	"we remember each generated node, so that they can be resolved if a node points to an existing node"
+	^ blocks ifNil: [ blocks := Dictionary new ]
+]
 
 { #category : #'as yet unclassified' }
 CDCodeModelBuilder >> flowPragmas: aMethod [
@@ -34,17 +41,16 @@ CDCodeModelBuilder >> resolveOutgoing: aCollection at: index [
 	| method pragma state |
 	method := self resolveMethod: aCollection.
 	pragma := (self flowPragmas: method) at: index.
-	state := (CDBlockObject withName: pragma arguments second) new.
-	state label: pragma arguments first.
+	state := self blocks
+		at: (aCollection copyWith: index)
+		ifAbsentPut: [ (CDBlockObject withName: pragma arguments second) new
+				label: pragma arguments first;
+				yourself ].
 	^ pragma arguments third = #self
-		ifTrue: [ state
-				resolveOutgoing: aCollection
-				at: index + 1
-				builder: self ]
-		ifFalse: [ state
-				resolveOutgoing: pragma arguments third
-				at: 1
-				builder: self ]
+		ifTrue:
+			[ state resolveOutgoing: aCollection at: index + 1 builder: self ]
+		ifFalse:
+			[ state resolveOutgoing: pragma arguments third at: 1 builder: self ]
 ]
 
 { #category : #setting }
