@@ -10,7 +10,8 @@ Class {
 
 { #category : #'as yet unclassified' }
 CDSplittingBlock class >> stateObjectName [
-	^ #transitionFork
+
+	^ nil
 ]
 
 { #category : #accessing }
