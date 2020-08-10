@@ -15,7 +15,7 @@ CDEndState >> acceptStateVisitor: aStateObjectVisitor [
 ]
 
 { #category : #'as yet unclassified' }
-CDEndState >> resolve: aString in: aClass builder: aFCCodeModelBuilder [ 
+CDEndState >> resolve: aString  builder: aFCCodeModelBuilder [ 
 	
 ]
 

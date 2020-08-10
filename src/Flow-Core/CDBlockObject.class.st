@@ -90,8 +90,8 @@ CDBlockObject >> printOn: aStream [
 ]
 
 { #category : #'as yet unclassified' }
-CDBlockObject >> resolve: flowName in: aCollection builder: aBuilder [ 
-	outgoing := aBuilder resolve: flowName outgoing: aCollection.
+CDBlockObject >> resolve: aCollection builder: aBuilder [ 
+	outgoing := aBuilder resolve: aCollection.
 	outgoing incoming: self.
 ]
 
