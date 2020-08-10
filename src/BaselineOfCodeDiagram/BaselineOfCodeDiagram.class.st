@@ -36,5 +36,5 @@ BaselineOfCodeDiagram >> roassal3: spec [
 		baseline: 'Roassal3' with: [ 
 			spec
 				"loads: 'Core';"
-				repository: 'github://ObjectProfile/Roassal3/src' ]
+				repository: 'github://ObjectProfile/Roassal3:v0.9.2/src' ]
 ]
