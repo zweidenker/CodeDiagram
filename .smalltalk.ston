@@ -1,0 +1,11 @@
+SmalltalkCISpec {
+  #loading : [
+      SCIMetacelloLoadSpec {
+          #baseline : 'CodeDiagram',
+          #directory : 'src',
+          #load : [ 'Tests' ],
+          #platforms : [ #pharo ]
+      }
+  ]
+}
+
