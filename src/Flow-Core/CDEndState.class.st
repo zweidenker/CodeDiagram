@@ -20,11 +20,6 @@ CDEndState >> resolve: aString  builder: aFCCodeModelBuilder [
 ]
 
 { #category : #'as yet unclassified' }
-CDEndState >> resolve: aString in: aClass builder: aFCCodeModelBuilder [ 
-	
-]
-
-{ #category : #'as yet unclassified' }
 CDEndState >> shape [
 	^ RSEllipse new 
 		model: self;
