@@ -1,6 +1,6 @@
 Class {
 	#name : #CDDecision,
-	#superclass : #CDBlockObject,
+	#superclass : #CDFlowEntity,
 	#instVars : [
 		'yes',
 		'no'
@@ -27,6 +27,14 @@ CDDecision >> no [
 CDDecision >> no: anObject [
 	anObject incoming: self.
 	no := anObject
+]
+
+{ #category : #'as yet unclassified' }
+CDDecision >> resolve: aCollection builder: aBuilder [ 
+	yes := aBuilder resolve: (aCollection first: 2).
+	yes incoming: self.
+	no := aBuilder resolve: (aCollection last: 2).
+	no incoming: self
 ]
 
 { #category : #'as yet unclassified' }

@@ -1,6 +1,6 @@
 Class {
 	#name : #CDTransition,
-	#superclass : #CDBlockObject,
+	#superclass : #CDFlowEntity,
 	#category : #'Flow-Core'
 }
 
