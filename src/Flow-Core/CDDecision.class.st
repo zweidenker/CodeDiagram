@@ -1,6 +1,10 @@
 Class {
 	#name : #CDDecision,
-	#superclass : #CDSplittingBlock,
+	#superclass : #CDBlockObject,
+	#instVars : [
+		'no',
+		'yes'
+	],
 	#category : #'Flow-Core'
 }
 
@@ -16,7 +20,15 @@ CDDecision >> acceptStateVisitor: aStateObjectVisitor [
 
 { #category : #accessing }
 CDDecision >> no [
-	^ secondBranch
+	^ no
+]
+
+{ #category : #visiting }
+CDDecision >> resolveOutgoing: aCollection at: index builder: aBuilder [
+	yes := aBuilder resolveOutgoing: (aCollection first: 2) at: index.
+	yes incoming: self.
+	no := aBuilder resolveOutgoing:  (aCollection last: 2) at: index.
+	no incoming: self
 ]
 
 { #category : #accessing }
@@ -39,5 +51,5 @@ CDDecision >> shape [
 
 { #category : #accessing }
 CDDecision >> yes [
-	^ firstBranch
+	^ yes
 ]

@@ -130,7 +130,23 @@ CDBlockObjectVisitor >> visitAction: anAction [
 { #category : #visiting }
 CDBlockObjectVisitor >> visitDecision: aDecision [ 
 
-	self visitSplittingBlock: aDecision
+	| condition firstBranch secondBranch previous |
+	condition := self dimensionAt: aDecision.
+	firstBranch := self dimensionAt: aDecision yes.
+	secondBranch := self dimensionAt: aDecision no.
+	previous := self dimensionAt: aDecision incoming. 
+	self 
+		position: firstBranch rightOf: condition strength: ClStrength strong;
+		position: firstBranch middleOf: condition strength: ClStrength strong; 
+		position: secondBranch under: condition strength: ClStrength strong;
+		position: secondBranch centerOf: condition strength: ClStrength strong;
+		position: condition under: previous strength: ClStrength strong. 
+
+	edges add: (aDecision -> (aDecision yes)).
+	edges add: (aDecision -> (aDecision no)).
+
+	self visit: aDecision yes.
+	self visit: aDecision no.
 ]
 
 { #category : #visiting }
@@ -148,9 +164,22 @@ CDBlockObjectVisitor >> visitEnd: anEndState [
 ]
 
 { #category : #visiting }
-CDBlockObjectVisitor >> visitFork: aFork [ 
-
-	self visitSplittingBlock: aFork
+CDBlockObjectVisitor >> visitFork: aFork [
+	| condition branch previous |
+	self halt.
+	condition := self dimensionAt: aFork.
+	aFork branches
+		do: [ :eachBranch | 
+			previous := self dimensionAt: aFork incoming. 
+			branch := self dimensionAt: eachBranch.
+			self position: branch under: condition strength: ClStrength strong.
+			self position: branch centerOf: condition strength: ClStrength strong.
+			self
+				position: condition
+				under: previous
+				strength: ClStrength strong.
+			edges add: aFork -> eachBranch.
+			self visit: eachBranch ]
 ]
 
 { #category : #visiting }

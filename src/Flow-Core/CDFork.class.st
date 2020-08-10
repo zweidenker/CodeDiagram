@@ -1,6 +1,9 @@
 Class {
 	#name : #CDFork,
-	#superclass : #CDSplittingBlock,
+	#superclass : #CDBlockObject,
+	#instVars : [
+		'branches'
+	],
 	#category : #'Flow-Core'
 }
 
@@ -12,6 +15,31 @@ CDFork class >> stateObjectName [
 { #category : #visiting }
 CDFork >> acceptStateVisitor: aStateObjectVisitor [ 
 	^ aStateObjectVisitor visitFork: self
+]
+
+{ #category : #accessing }
+CDFork >> branches [ 
+
+	^ branches ifNil: [ branches := OrderedCollection new ]
+]
+
+{ #category : #accessing }
+CDFork >> branches: aCollectionOfBranches [
+
+	branches := aCollectionOfBranches
+]
+
+{ #category : #visiting }
+CDFork >> resolveOutgoing: aCollection at: index builder: aBuilder [
+	| outgoings branch |
+	outgoings := aCollection copy.
+	[ outgoings isEmpty ]
+		whileFalse: [ 
+			branch := (aBuilder resolveOutgoing: (outgoings first: 2) at: index).
+			self branches
+				add: branch.
+			outgoings := outgoings allButFirst: 2.
+			branch incoming: self. ].
 ]
 
 { #category : #'as yet unclassified' }
