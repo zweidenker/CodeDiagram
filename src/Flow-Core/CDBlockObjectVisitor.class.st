@@ -166,7 +166,6 @@ CDBlockObjectVisitor >> visitEnd: anEndState [
 { #category : #visiting }
 CDBlockObjectVisitor >> visitFork: aFork [
 	| condition branch previous |
-	self halt.
 	condition := self dimensionAt: aFork.
 	aFork branches
 		do: [ :eachBranch | 
