@@ -2,10 +2,18 @@ Class {
 	#name : #CDFlowDiagram,
 	#superclass : #Object,
 	#instVars : [
-		'model'
+		'model',
+		'flowName'
 	],
 	#category : #'Flow-Core'
 }
+
+{ #category : #accessing }
+CDFlowDiagram class >> flowName: aString startAt: aClass method: aSelector [
+	^ self new
+		flowName: aString;
+		startAt: aClass method: aSelector
+]
 
 { #category : #accessing }
 CDFlowDiagram class >> startAt: aClass method: aString [
@@ -17,7 +25,7 @@ CDFlowDiagram class >> startAt: aClass method: aString [
 CDFlowDiagram >> drawOn: canvas [
 
 	| visitor  eb |
-	visitor := CDBlockObjectVisitor new.
+	visitor := CDAutoLayoutVisitor new.
 	visitor layout: model.
 	visitor.
 	visitor objects do: [ :object |
@@ -50,6 +58,11 @@ CDFlowDiagram >> drawOn: canvas [
 	^ canvas @RSCanvasController
 ]
 
+{ #category : #accessing }
+CDFlowDiagram >> flowName: aString [ 
+	flowName := aString
+]
+
 { #category : #visualization }
 CDFlowDiagram >> gtInspectorViewIn: composite [
 	<gtInspectorPresentationOrder: 0>
@@ -67,6 +80,7 @@ CDFlowDiagram >> gtInspectorViewIn: composite [
 { #category : #accessing }
 CDFlowDiagram >> startAt: aClass method: aString [
 	model := CDCodeModelBuilder new
+		flowName: flowName;
 		startAt: aClass method: aString asSymbol;
 		model
 ]

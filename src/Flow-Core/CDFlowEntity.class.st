@@ -1,5 +1,5 @@
 Class {
-	#name : #CDBlockObject,
+	#name : #CDFlowEntity,
 	#superclass : #Object,
 	#instVars : [
 		'label',
@@ -11,52 +11,52 @@ Class {
 }
 
 { #category : #'instance creation' }
-CDBlockObject class >> labelled: aString [ 
+CDFlowEntity class >> labelled: aString [ 
 	^ self new 
 		label: aString
 ]
 
 { #category : #'instance creation' }
-CDBlockObject class >> withName: aString [
+CDFlowEntity class >> withName: aString [
 	^ self allSubclasses 
 		detect: [ :each | each stateObjectName = aString ]
 		ifNone: [  nil ]
 ]
 
 { #category : #accessing }
-CDBlockObject >> basicSize [ 
+CDFlowEntity >> basicSize [ 
 	^ 200
 ]
 
 { #category : #'public - shape' }
-CDBlockObject >> border [
+CDFlowEntity >> border [
 	^ RSBorder new 
 		width: 5; 
 		color: Color darkGray
 ]
 
 { #category : #accessing }
-CDBlockObject >> color [
+CDFlowEntity >> color [
 	^ color
 ]
 
 { #category : #accessing }
-CDBlockObject >> color: anObject [
+CDFlowEntity >> color: anObject [
 	color := anObject
 ]
 
 { #category : #accessing }
-CDBlockObject >> fontSize [
+CDFlowEntity >> fontSize [
 	^ 15
 ]
 
 { #category : #accessing }
-CDBlockObject >> incoming [
+CDFlowEntity >> incoming [
 	^ incoming
 ]
 
 { #category : #accessing }
-CDBlockObject >> incoming: anObject [
+CDFlowEntity >> incoming: anObject [
 	incoming ifNil: [
 		incoming := anObject.  
 		(anObject respondsTo: #outgoing:) ifTrue: [ 
@@ -65,37 +65,37 @@ CDBlockObject >> incoming: anObject [
 ]
 
 { #category : #accessing }
-CDBlockObject >> label [
+CDFlowEntity >> label [
 	^ label
 ]
 
 { #category : #accessing }
-CDBlockObject >> label: anObject [
+CDFlowEntity >> label: anObject [
 	label := anObject
 ]
 
 { #category : #accessing }
-CDBlockObject >> outgoing [
+CDFlowEntity >> outgoing [
 	^ outgoing
 ]
 
 { #category : #accessing }
-CDBlockObject >> outgoing: anObject [
+CDFlowEntity >> outgoing: anObject [
 	outgoing := anObject
 ]
 
 { #category : #printing }
-CDBlockObject >> printOn: aStream [
+CDFlowEntity >> printOn: aStream [
 	aStream << self class name << ' - ' << label asString
 ]
 
 { #category : #'as yet unclassified' }
-CDBlockObject >> resolve: flowName in: aCollection builder: aBuilder [ 
-	outgoing := aBuilder resolve: flowName outgoing: aCollection.
+CDFlowEntity >> resolve: aCollection builder: aBuilder [ 
+	outgoing := aBuilder resolve: aCollection.
 	outgoing incoming: self.
 ]
 
 { #category : #accessing }
-CDBlockObject >> shapeSize [
+CDFlowEntity >> shapeSize [
 	^ self basicSize 
 ]

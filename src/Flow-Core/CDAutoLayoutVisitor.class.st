@@ -1,9 +1,8 @@
 Class {
-	#name : #CDBlockObjectVisitor,
-	#superclass : #Object,
+	#name : #CDAutoLayoutVisitor,
+	#superclass : #CDFlowVisitor,
 	#instVars : [
 		'solver',
-		'seen',
 		'edges',
 		'dimensions'
 	],
@@ -11,7 +10,7 @@ Class {
 }
 
 { #category : #accessing }
-CDBlockObjectVisitor >> dimensionAt: aState [ 
+CDAutoLayoutVisitor >> dimensionAt: aState [ 
 	aState ifNil: [ Error signal: 'nil does not work' ].
 	^ self dimensions 
 		at: aState
@@ -20,96 +19,86 @@ CDBlockObjectVisitor >> dimensionAt: aState [
 ]
 
 { #category : #accessing }
-CDBlockObjectVisitor >> dimensions [ 
+CDAutoLayoutVisitor >> dimensions [ 
 	^ dimensions 
 ]
 
 { #category : #accessing }
-CDBlockObjectVisitor >> edges [
+CDAutoLayoutVisitor >> edges [
 	^ edges
 ]
 
 { #category : #visiting }
-CDBlockObjectVisitor >> horizontalGap [
+CDAutoLayoutVisitor >> horizontalGap [
 	^ self shapeSize * 2
 ]
 
 { #category : #initialization }
-CDBlockObjectVisitor >> initialize [ 	
+CDAutoLayoutVisitor >> initialize [ 	
 	super initialize.
 	dimensions := Dictionary new.
 	solver := ClSimplexSolver new.
-	seen := OrderedDictionary new.
 	edges := OrderedCollection new
 ]
 
 { #category : #visiting }
-CDBlockObjectVisitor >> layout: aState [ 
+CDAutoLayoutVisitor >> layout: aState [ 
 	self visit: aState
 ]
 
 { #category : #accessing }
-CDBlockObjectVisitor >> objects [
+CDAutoLayoutVisitor >> objects [
 	^ dimensions keys
 ]
 
 { #category : #visiting }
-CDBlockObjectVisitor >> position: next centerOf: prev strength: aNumber [
+CDAutoLayoutVisitor >> position: next centerOf: prev strength: aNumber [
 	solver 
 		addConstraint: (prev x cnEqual: next x strength: aNumber).
 ]
 
 { #category : #visiting }
-CDBlockObjectVisitor >> position: next leftOf: prev strength: aNumber [
+CDAutoLayoutVisitor >> position: next leftOf: prev strength: aNumber [
 "	solver 
 		addConstraint: (prev x cnGEQ: next x + next width + self horizontalGap strength: aNumber)"
 	self position: prev rightOf: next strength: aNumber 
 ]
 
 { #category : #visiting }
-CDBlockObjectVisitor >> position: next middleOf: prev strength: aNumber [
+CDAutoLayoutVisitor >> position: next middleOf: prev strength: aNumber [
 	solver 
 		addConstraint: (prev y cnEqual: next y strength: aNumber).
 ]
 
 { #category : #visiting }
-CDBlockObjectVisitor >> position: next rightOf: prev strength: aNumber [
+CDAutoLayoutVisitor >> position: next rightOf: prev strength: aNumber [
 	solver 
 		addConstraint: (next x cnGEQ: prev x + self horizontalGap strength: aNumber)
 ]
 
 { #category : #visiting }
-CDBlockObjectVisitor >> position: next under: prev strength: aNumber [
+CDAutoLayoutVisitor >> position: next under: prev strength: aNumber [
 	solver 
 		addConstraint: (next y cnGEQ: prev y + "prev height + "self verticalGap strength: aNumber)
 ]
 
 { #category : #accessing }
-CDBlockObjectVisitor >> shapeSize [
+CDAutoLayoutVisitor >> shapeSize [
 	^ 150
 ]
 
 { #category : #accessing }
-CDBlockObjectVisitor >> solver [
+CDAutoLayoutVisitor >> solver [
 	^ solver
 ]
 
 { #category : #visiting }
-CDBlockObjectVisitor >> verticalGap [
+CDAutoLayoutVisitor >> verticalGap [
 	^ self shapeSize * 1.5
 ]
 
 { #category : #visiting }
-CDBlockObjectVisitor >> visit: aState [ 
-	^ seen 
-		at: aState
-		ifAbsent: [ 
-			seen at: aState put: Object new.
-			aState acceptStateVisitor: self ]
-]
-
-{ #category : #visiting }
-CDBlockObjectVisitor >> visitAction: anAction [ 
+CDAutoLayoutVisitor >> visitAction: anAction [ 
 	| action previous outgoingPosition |
 	action := self dimensionAt: anAction.
 	previous := self dimensionAt: anAction incoming.
@@ -121,14 +110,14 @@ CDBlockObjectVisitor >> visitAction: anAction [
 		addConstraint: (state x cnGEQ: prevState x + self horizontalGap strength: ClStrength medium);
 		addConstraint: (state y cnGEQ: prevState y strength: ClStrength medium)."
 	anAction outgoing ifNotNil: [ 
-		edges add: (anAction -> (anAction outgoing)).
+		edges add: (anAction -> (anAction outgoing)). 
 		outgoingPosition := self dimensionAt: anAction outgoing.
 		self position: outgoingPosition rightOf: action strength: ClStrength weak.
 		self visit: anAction outgoing ]
 ]
 
 { #category : #visiting }
-CDBlockObjectVisitor >> visitCondition: aCondition [ 
+CDAutoLayoutVisitor >> visitCondition: aCondition [ 
 	| condition yes no previous |
 	condition := self dimensionAt: aCondition.
 	yes := self dimensionAt: aCondition yes.
@@ -149,7 +138,7 @@ CDBlockObjectVisitor >> visitCondition: aCondition [
 ]
 
 { #category : #visiting }
-CDBlockObjectVisitor >> visitEnd: anEndState [ 
+CDAutoLayoutVisitor >> visitEnd: anEndState [ 
 	| end previous |
 	end := self dimensionAt: anEndState.
 	previous := self dimensionAt: anEndState incoming.
@@ -163,7 +152,7 @@ CDBlockObjectVisitor >> visitEnd: anEndState [
 ]
 
 { #category : #visiting }
-CDBlockObjectVisitor >> visitStartState: aStartState [ 
+CDAutoLayoutVisitor >> visitStartState: aStartState [ 
 	| start next |
 	start := self dimensionAt: aStartState.
 	next := self dimensionAt: aStartState outgoing.
@@ -175,7 +164,7 @@ CDBlockObjectVisitor >> visitStartState: aStartState [
 ]
 
 { #category : #visiting }
-CDBlockObjectVisitor >> visitState: aState [ 
+CDAutoLayoutVisitor >> visitState: aState [ 
 	| state previous next |
 	state := self dimensionAt: aState.
 	previous := self dimensionAt: aState incoming.

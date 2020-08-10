@@ -1,6 +1,6 @@
 Class {
 	#name : #CDStartState,
-	#superclass : #CDBlockObject,
+	#superclass : #CDFlowEntity,
 	#category : #'Flow-Core'
 }
 

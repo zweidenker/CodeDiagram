@@ -1,6 +1,6 @@
 Class {
 	#name : #CDEndState,
-	#superclass : #CDBlockObject,
+	#superclass : #CDFlowEntity,
 	#category : #'Flow-Core'
 }
 
@@ -12,6 +12,11 @@ CDEndState class >> stateObjectName [
 { #category : #visiting }
 CDEndState >> acceptStateVisitor: aStateObjectVisitor [ 
 	^ aStateObjectVisitor visitEnd: self
+]
+
+{ #category : #'as yet unclassified' }
+CDEndState >> resolve: aString  builder: aFCCodeModelBuilder [ 
+	
 ]
 
 { #category : #'as yet unclassified' }
