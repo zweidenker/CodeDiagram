@@ -79,7 +79,7 @@ CDCodeModelBuilder >> resolve: aString outgoing: aCollection [
 	method := self resolveMethod: aCollection.
 	pragma := (method pragmaAt: #flow:element:outgoing:) 
 	pragma ifNil: [ CDPragmaNotFound signal ].
-	state := (CDBlockObject withName: pragma arguments second) new.
+	state := (CDFlowEntity withName: pragma arguments second) new.
 	state label: pragma arguments first.
 	^ state 
 		resolve: pragma arguments first
