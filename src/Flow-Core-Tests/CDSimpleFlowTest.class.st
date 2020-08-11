@@ -20,6 +20,12 @@ CDSimpleFlowTest >> flowStartSelector [
 ]
 
 { #category : #tests }
+CDSimpleFlowTest >> testJoinOnEnd [
+	self assert: model class equals: CDStartState.
+	self assert: model outgoing class equals: CDState 
+]
+
+{ #category : #tests }
 CDSimpleFlowTest >> testStartEntity [
 	self assert: model class equals: CDStartState.
 	self assert: model outgoing class equals: CDState 

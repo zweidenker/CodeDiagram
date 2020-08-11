@@ -10,6 +10,16 @@ CDTestState1 >> decision1 [
 ]
 
 { #category : #'as yet unclassified' }
+CDTestState1 >> joinStateNo [
+	<flow: #joinState element: #state label: 'no' outgoing: #(CDTestEnd joinStateEnd)>
+]
+
+{ #category : #'as yet unclassified' }
+CDTestState1 >> joinStateYes [
+	<flow: #joinState element: #state label: 'yes' outgoing: #(CDTestEnd joinStateEnd)>
+]
+
+{ #category : #'as yet unclassified' }
 CDTestState1 >> no [
 	<flow: #test1 element: #state label: 'no' outgoing: #(CDTestEnd theEnd)>
 ]
