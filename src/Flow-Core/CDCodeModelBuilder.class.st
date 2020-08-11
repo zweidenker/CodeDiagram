@@ -99,7 +99,8 @@ CDCodeModelBuilder >> resolve: aCollection [
 	entities last
 		resolve: (self outgoingSpecFor: pragmas last)
 		builder: self.
-	^ seen at: method
+	
+	^ entities first
 ]
 
 { #category : #'as yet unclassified' }
