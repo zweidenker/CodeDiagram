@@ -77,11 +77,17 @@ CDCodeModelBuilder >> pragmaName [
 
 { #category : #resolving }
 CDCodeModelBuilder >> resolve: method [
+	"Each has method has representative state. If there is a seqeuence of pragmas all but the
+	last are considered to be local (outgoing being #self)"
 	| pragmas entities |
+	"if the method has been treated we return the cached entity. This enables multiple incoming
+	connections"
 	seen 
 		at: method 
 		ifPresent: [ :e | ^ e ].
 		
+	"treat a sequence of pragmas if there are multiple. As the pragmas are local bound we can 
+	construct the flow entities immediately. Otherwise this conflicts with the recursive behavior"
 	pragmas := method pragmas.
 	entities := pragmas allButLast 
 		collect: [ :nextPragma |
@@ -89,14 +95,20 @@ CDCodeModelBuilder >> resolve: method [
 			self newEntityNamed: nextPragma ]
 		as: OrderedCollection.
 	
+	"add the last entity which is always there. If there is only one pragma then first = last"
 	entities add: (self newEntityNamed: pragmas last ).
+	
+	"store first encountered entity as representative"
 	seen 
 		at: method
 		put: entities first.
 
+	"connect all local generated entities with each other"
 	entities allButFirst withIndexDo: [ :entity :idx |
 		 entity incoming: (entities at: idx) ].
 	
+	"Now that the seen cache is set up and the local entities in place we can recursre to the next 
+	entity which is the last"
 	entities last
 		resolve: (self outgoingMethodsFor: pragmas last)
 		builder: self.
