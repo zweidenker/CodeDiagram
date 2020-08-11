@@ -57,15 +57,17 @@ CDCodeModelBuilder >> newEntityNamed: aPragma [
 ]
 
 { #category : #'as yet unclassified' }
-CDCodeModelBuilder >> outgoingSpecFor: aPragma [ 
+CDCodeModelBuilder >> outgoingMethodsFor: aPragma [ 
 	| outgoing |
 	
 	outgoing := aPragma arguments fourth.
-	outgoing isString ifTrue: [ 
-		(outgoing = #self) 
-			ifTrue: [ ^ { aPragma method methodClass name. aPragma method selector } ] ].
-	^ outgoing 
-	
+	^ outgoing isString 
+		ifTrue: [ 
+			(outgoing = #self) 
+				ifTrue: [ aPragma method  ]]
+		ifFalse: [ 
+			outgoing pairsCollect: [ :className :selector | 
+				(self class environment at: className) >> selector asSymbol ] ]
 ]
 
 { #category : #'as yet unclassified' }
@@ -74,9 +76,8 @@ CDCodeModelBuilder >> pragmaName [
 ]
 
 { #category : #resolving }
-CDCodeModelBuilder >> resolve: aCollection [ 
-	| method pragmas entities |
-	method := self resolveMethod: aCollection.
+CDCodeModelBuilder >> resolve: method [
+	| pragmas entities |
 	seen 
 		at: method 
 		ifPresent: [ :e | ^ e ].
@@ -97,23 +98,14 @@ CDCodeModelBuilder >> resolve: aCollection [
 		 entity incoming: (entities at: idx) ].
 	
 	entities last
-		resolve: (self outgoingSpecFor: pragmas last)
+		resolve: (self outgoingMethodsFor: pragmas last)
 		builder: self.
 	
 	^ entities first
 ]
 
-{ #category : #'as yet unclassified' }
-CDCodeModelBuilder >> resolveMethod: aCollection [ 
-	| targetClass |
-	self assert: aCollection size = 2.
-	targetClass := self class environment at: aCollection first asSymbol.
-	^ targetClass >> aCollection second
-]
-
 { #category : #setting }
 CDCodeModelBuilder >> startAt: aClass method: aString [
 
-	
-	startState := self resolve: { aClass name . aString }.
+	startState := self resolve: aClass >> aString asSymbol
 ]
