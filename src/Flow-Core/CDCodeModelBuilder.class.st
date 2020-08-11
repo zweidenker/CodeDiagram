@@ -41,7 +41,7 @@ CDCodeModelBuilder >> flowName: anObject [
 { #category : #initialization }
 CDCodeModelBuilder >> initialize [ 
 	super initialize.
-	seen := OrderedCollection new.
+	seen := Dictionary new.
 ]
 
 { #category : #accessing }
@@ -54,20 +54,6 @@ CDCodeModelBuilder >> newEntityNamed: aPragma [
 
 	^ (CDFlowEntity withName: aPragma arguments second) new
 		label: aPragma arguments third
-]
-
-{ #category : #'as yet unclassified' }
-CDCodeModelBuilder >> nextPragmaIn: aCompiledMethod [ 
-	| candidates |
-	candidates := aCompiledMethod pragmas
-		select: [ :each | each selector = self pragmaName & (each arguments first = flowName) ].
-	candidates do: [ :each | 
-		(seen includes: each) ifFalse: [ 
-			seen add: each.
-			^ each ] ].
-	CDPragmaNotFound signal: 'no pragma in sequence found'
-	
-	
 ]
 
 { #category : #'as yet unclassified' }
