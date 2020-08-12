@@ -1,7 +1,7 @@
 Class {
 	#name : #CDStartState,
 	#superclass : #CDFlowEntity,
-	#category : #'Flow-Core'
+	#category : #'Flow-Core-Model'
 }
 
 { #category : #'as yet unclassified' }
@@ -16,7 +16,7 @@ CDStartState >> acceptStateVisitor: aStateObjectVisitor [
 
 { #category : #accessing }
 CDStartState >> outgoing: anObject [
-	anObject incoming: self.
+	anObject addIncoming: self.
 	outgoing := anObject
 ]
 

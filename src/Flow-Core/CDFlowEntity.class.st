@@ -6,7 +6,7 @@ Class {
 		'outgoing',
 		'incoming'
 	],
-	#category : #'Flow-Core'
+	#category : #'Flow-Core-Model'
 }
 
 { #category : #'instance creation' }
@@ -20,6 +20,19 @@ CDFlowEntity class >> withName: aString [
 	^ self allSubclasses 
 		detect: [ :each | each stateObjectName = aString ]
 		ifNone: [  nil ]
+]
+
+{ #category : #accessing }
+CDFlowEntity >> addIncoming: anObject [
+	(incoming includes: anObject) ifFalse: [   
+		incoming add: anObject.  
+		(anObject respondsTo: #outgoing:) ifTrue: [ 
+			anObject outgoing: self ] ]
+]
+
+{ #category : #'as yet unclassified' }
+CDFlowEntity >> anyIncoming [
+	^ incoming anyOne
 ]
 
 { #category : #accessing }
@@ -44,13 +57,10 @@ CDFlowEntity >> incoming [
 	^ incoming
 ]
 
-{ #category : #accessing }
-CDFlowEntity >> incoming: anObject [
-	incoming ifNil: [
-		incoming := anObject.  
-		(anObject respondsTo: #outgoing:) ifTrue: [ 
-			anObject outgoing: self ].
-		 ]
+{ #category : #initialization }
+CDFlowEntity >> initialize [ 
+	super initialize.
+	incoming := Set new.
 ]
 
 { #category : #accessing }
@@ -81,7 +91,7 @@ CDFlowEntity >> printOn: aStream [
 { #category : #'as yet unclassified' }
 CDFlowEntity >> resolve: aCollection builder: aBuilder [ 
 	outgoing := aBuilder resolve: aCollection first.
-	outgoing incoming: self.
+	outgoing addIncoming: self.
 ]
 
 { #category : #accessing }

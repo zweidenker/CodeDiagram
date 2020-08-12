@@ -10,11 +10,14 @@ BaselineOfCodeDiagram >> baseline: spec [
 		
 	spec for: #'common' do: [			
 		spec 
-			package: 'Flow-Core' with: [ spec requires: #( 'Roassal3' 'Cassowary' ) ];
-			package: 'Flow-Core-Tests' with: [ spec requires: #( 'Flow-Core' ) ].
+			package: 'Flow-Core';
+			package: 'Flow-Core-Tests' with: [ spec requires: #( 'Flow-Core' ) ];
+			package: 'Flow-Roassal' with: [ spec requires: #( 'Flow-Core' 'Roassal3' 'Cassowary' ) ].
 
 		spec
-			group: 'default' with: #('Flow-Core');
+			group: 'default' with: #('Flow-Core' 'Flow-Roassal');
+			group: 'Core' with: #('Flow-Core');
+			group: 'UI' with: #('Flow-Roassal');
 			group: 'Tests' with: #('Flow-Core-Tests').
 		self 
 			cassowary: spec;

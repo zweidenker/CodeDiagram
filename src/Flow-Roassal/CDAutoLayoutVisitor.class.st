@@ -6,7 +6,7 @@ Class {
 		'edges',
 		'dimensions'
 	],
-	#category : #'Flow-Core'
+	#category : #'Flow-Roassal'
 }
 
 { #category : #accessing }
@@ -122,7 +122,7 @@ CDAutoLayoutVisitor >> visitCondition: aCondition [
 	condition := self dimensionAt: aCondition.
 	yes := self dimensionAt: aCondition yes.
 	no := self dimensionAt: aCondition no.
-	previous := self dimensionAt: aCondition incoming. 
+	previous := self dimensionAt: aCondition anyIncoming. 
 	self 
 		position: yes rightOf: condition strength: ClStrength strong;
 		position: yes middleOf: condition strength: ClStrength strong; 
@@ -141,7 +141,7 @@ CDAutoLayoutVisitor >> visitCondition: aCondition [
 CDAutoLayoutVisitor >> visitEnd: anEndState [ 
 	| end previous |
 	end := self dimensionAt: anEndState.
-	previous := self dimensionAt: anEndState incoming.
+	previous := self dimensionAt: anEndState anyIncoming.
 	self 
 		position: end under: previous strength: ClStrength strong;
 		position: end centerOf: previous strength:  ClStrength required.
@@ -167,7 +167,7 @@ CDAutoLayoutVisitor >> visitStartState: aStartState [
 CDAutoLayoutVisitor >> visitState: aState [ 
 	| state previous next |
 	state := self dimensionAt: aState.
-	previous := self dimensionAt: aState incoming.
+	previous := self dimensionAt: aState anyIncoming.
 
 	self position: state under: previous strength: ClStrength medium. 
 		

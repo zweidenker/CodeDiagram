@@ -5,7 +5,7 @@ Class {
 		'model',
 		'flowName'
 	],
-	#category : #'Flow-Core'
+	#category : #'Flow-Roassal'
 }
 
 { #category : #accessing }
@@ -75,6 +75,11 @@ CDFlowDiagram >> gtInspectorViewIn: composite [
 			canvas when: RSExtentChangedEvent do: [ canvas zoomToFit ].
 			canvas ]
 		
+]
+
+{ #category : #'as yet unclassified' }
+CDFlowDiagram >> model: aStartState [ 
+	model := aStartState 
 ]
 
 { #category : #accessing }
