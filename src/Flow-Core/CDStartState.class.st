@@ -16,7 +16,7 @@ CDStartState >> acceptStateVisitor: aStateObjectVisitor [
 
 { #category : #accessing }
 CDStartState >> outgoing: anObject [
-	anObject incoming: self.
+	anObject addIncoming: self.
 	outgoing := anObject
 ]
 

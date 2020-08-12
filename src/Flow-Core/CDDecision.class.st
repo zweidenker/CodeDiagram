@@ -32,9 +32,9 @@ CDDecision >> no: anObject [
 { #category : #'as yet unclassified' }
 CDDecision >> resolve: aCollection builder: aBuilder [ 
 	yes := aBuilder resolve: (aCollection first).
-	yes incoming: self.
+	yes addIncoming: self.
 	no := aBuilder resolve: (aCollection second).
-	no incoming: self
+	no addIncoming: self
 ]
 
 { #category : #accessing }

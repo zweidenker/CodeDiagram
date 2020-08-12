@@ -105,7 +105,7 @@ CDCodeModelBuilder >> resolve: method [
 
 	"connect all local generated entities with each other"
 	entities allButFirst withIndexDo: [ :entity :idx |
-		 entity incoming: (entities at: idx) ].
+		 entity addIncoming: (entities at: idx) ].
 	
 	"Now that the seen cache is set up and the local entities in place we can recursre to the next 
 	entity which is the last"

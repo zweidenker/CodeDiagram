@@ -23,6 +23,14 @@ CDFlowEntity class >> withName: aString [
 ]
 
 { #category : #accessing }
+CDFlowEntity >> addIncoming: anObject [
+	(incoming includes: anObject) ifFalse: [   
+		incoming add: anObject.  
+		(anObject respondsTo: #outgoing:) ifTrue: [ 
+			anObject outgoing: self ] ]
+]
+
+{ #category : #accessing }
 CDFlowEntity >> basicSize [ 
 	^ 200
 ]
@@ -44,13 +52,10 @@ CDFlowEntity >> incoming [
 	^ incoming
 ]
 
-{ #category : #accessing }
-CDFlowEntity >> incoming: anObject [
-	incoming ifNil: [
-		incoming := anObject.  
-		(anObject respondsTo: #outgoing:) ifTrue: [ 
-			anObject outgoing: self ].
-		 ]
+{ #category : #initialization }
+CDFlowEntity >> initialize [ 
+	super initialize.
+	incoming := Set new.
 ]
 
 { #category : #accessing }
@@ -81,7 +86,7 @@ CDFlowEntity >> printOn: aStream [
 { #category : #'as yet unclassified' }
 CDFlowEntity >> resolve: aCollection builder: aBuilder [ 
 	outgoing := aBuilder resolve: aCollection first.
-	outgoing incoming: self.
+	outgoing addIncoming: self.
 ]
 
 { #category : #accessing }
