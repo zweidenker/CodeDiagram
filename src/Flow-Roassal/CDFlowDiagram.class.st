@@ -77,6 +77,11 @@ CDFlowDiagram >> gtInspectorViewIn: composite [
 		
 ]
 
+{ #category : #'as yet unclassified' }
+CDFlowDiagram >> model: aStartState [ 
+	model := aStartState 
+]
+
 { #category : #accessing }
 CDFlowDiagram >> startAt: aClass method: aString [
 	model := CDCodeModelBuilder new

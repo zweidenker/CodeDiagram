@@ -30,6 +30,11 @@ CDFlowEntity >> addIncoming: anObject [
 			anObject outgoing: self ] ]
 ]
 
+{ #category : #'as yet unclassified' }
+CDFlowEntity >> anyIncoming [
+	^ incoming anyOne
+]
+
 { #category : #accessing }
 CDFlowEntity >> basicSize [ 
 	^ 200
