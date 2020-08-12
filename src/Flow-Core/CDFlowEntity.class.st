@@ -4,8 +4,7 @@ Class {
 	#instVars : [
 		'label',
 		'outgoing',
-		'incoming',
-		'color'
+		'incoming'
 	],
 	#category : #'Flow-Core'
 }
@@ -33,16 +32,6 @@ CDFlowEntity >> border [
 	^ RSBorder new 
 		width: 5; 
 		color: Color darkGray
-]
-
-{ #category : #accessing }
-CDFlowEntity >> color [
-	^ color
-]
-
-{ #category : #accessing }
-CDFlowEntity >> color: anObject [
-	color := anObject
 ]
 
 { #category : #accessing }
@@ -91,7 +80,7 @@ CDFlowEntity >> printOn: aStream [
 
 { #category : #'as yet unclassified' }
 CDFlowEntity >> resolve: aCollection builder: aBuilder [ 
-	outgoing := aBuilder resolve: aCollection.
+	outgoing := aBuilder resolve: aCollection first.
 	outgoing incoming: self.
 ]
 
