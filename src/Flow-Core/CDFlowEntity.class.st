@@ -6,7 +6,7 @@ Class {
 		'outgoing',
 		'incoming'
 	],
-	#category : #'Flow-Core'
+	#category : #'Flow-Core-Model'
 }
 
 { #category : #'instance creation' }

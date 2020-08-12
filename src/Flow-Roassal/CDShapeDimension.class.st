@@ -7,7 +7,7 @@ Class {
 		'width',
 		'height'
 	],
-	#category : #'Flow-Core'
+	#category : #'Flow-Roassal'
 }
 
 { #category : #'instance creation' }

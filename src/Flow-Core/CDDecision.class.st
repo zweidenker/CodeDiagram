@@ -5,7 +5,7 @@ Class {
 		'yes',
 		'no'
 	],
-	#category : #'Flow-Core'
+	#category : #'Flow-Core-Model'
 }
 
 { #category : #'as yet unclassified' }

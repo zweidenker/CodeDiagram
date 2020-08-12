@@ -5,7 +5,7 @@ Class {
 		'model',
 		'flowName'
 	],
-	#category : #'Flow-Core'
+	#category : #'Flow-Roassal'
 }
 
 { #category : #accessing }

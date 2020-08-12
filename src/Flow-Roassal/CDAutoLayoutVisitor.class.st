@@ -6,7 +6,7 @@ Class {
 		'edges',
 		'dimensions'
 	],
-	#category : #'Flow-Core'
+	#category : #'Flow-Roassal'
 }
 
 { #category : #accessing }

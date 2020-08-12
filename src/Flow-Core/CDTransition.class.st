@@ -1,7 +1,7 @@
 Class {
 	#name : #CDTransition,
 	#superclass : #CDFlowEntity,
-	#category : #'Flow-Core'
+	#category : #'Flow-Core-Model'
 }
 
 { #category : #'as yet unclassified' }
