@@ -1,12 +1,17 @@
 Class {
 	#name : #CDDecision,
-	#superclass : #CDTransitionFork,
+	#superclass : #CDSplittingBlock,
 	#category : #'Flow-Core'
 }
 
 { #category : #'as yet unclassified' }
 CDDecision class >> stateObjectName [
 	^ #decision
+]
+
+{ #category : #visiting }
+CDDecision >> acceptStateVisitor: aStateObjectVisitor [ 
+	^ aStateObjectVisitor visitDecision: self
 ]
 
 { #category : #accessing }
